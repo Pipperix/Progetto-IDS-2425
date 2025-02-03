@@ -10,6 +10,11 @@ public class DescrizioneTrasformato extends DescrizioneProdotto {
         this.trasformazioni = trasformazioni;
     }
 
+    public DescrizioneTrasformato(String descrizione, double prezzo) {
+        super(descrizione, prezzo);
+        this.trasformazioni = new HashSet<>();
+    }
+
     public Set<ProcessoTrasformazione> getTrasformazioni() {
         return new HashSet<>(trasformazioni);
     }
