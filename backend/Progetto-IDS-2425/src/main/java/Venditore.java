@@ -1,36 +1,57 @@
 import java.time.LocalDate;
 
-public class Venditore extends UtenteRegistrato{
+public abstract class Venditore extends UtenteRegistrato{
 
-    // entrambi gli attributi sono annullabili
-    private long partitaIva;
+    // Entrambi gli attributi sono annullabili (?)
+    private String partitaIva;
     private Azienda azienda;
 
-
+    // Costruttore estende UtenteRegistrato
     public Venditore(int id, String username, String nome, String cognome, String email, Indirizzo indirizzo,
-                     LocalDate dataDiNascita, long partitaIva, Azienda azienda) {
+                     LocalDate dataDiNascita, String partitaIva, Azienda azienda) {
         super(id, username, nome, cognome, email, indirizzo, dataDiNascita);
         this.partitaIva = partitaIva;
         this.azienda = azienda;
     }
 
+    // Getters
+    public String getPartitaIva() { return partitaIva; }
+    public Azienda getAzienda() { return azienda; }
 
-    public Prodotto creaContenuto(int id, String nome, DescrizioneProdotto descrizioneProdotto) {
-        return new Prodotto(id, nome, descrizioneProdotto);
+    // Setters
+    public void setPartitaIva(String partitaIva) { this.partitaIva = partitaIva; }
+    public void setAzienda(Azienda azienda) { this.azienda = azienda; }
+
+    // Creazione Prodotto
+    public void creaProdotto(int id, String nome, DescrizioneProdotto descrizioneProdotto, int quantita) {
+        // Aggiungi prodotto al db
+        // Logica db
+    }
+    public void creaProdotto(int id, String nome, String descrizione, double prezzo, int quantita) {
+        Prodotto prodotto = new Prodotto(id, nome, new DescrizioneProdotto(descrizione, prezzo), quantita);
+        // Aggiungi prodotto al db
+        // Logica db
     }
 
-
-    public void eliminaContenuto(Prodotto prodotto) {
+    // Eliminazione Prodotto
+    public void eliminaProdotto(Prodotto prodotto) {
+        // Elimina prodotto (prodotto.getId())
+        // Logica db
     }
 
-    /*
-    public DescrizioneProdotto modificaContenuto(Prodotto prodotto) {
-        return new DescrizioneProdotto(prodotto);
+    // Modifica Contenuto del prodotto (descrizione e prezzo)
+    public void modificaProdotto(Prodotto prodotto, String descrizione, double prezzo) {
+        prodotto.setDescrizioneProdotto(new DescrizioneProdotto(descrizione, prezzo));
     }
-     */
 
-    // forse meglio distinguere modificaDescrizione e modificaPrezzo ??
-    public DescrizioneProdotto modificaContenuto(String descrizione, double prezzo) {
-        return new DescrizioneProdotto(descrizione, prezzo);
+    // Modifica Prezzo del prodotto
+    public void modificaPrezzo(Prodotto prodotto, double prezzo) {
+        prodotto.getDescrizioneProdotto().setPrezzo(prezzo);
     }
+
+    // Modifica Descrizione del prodotto
+    public void modificaDescrizione(Prodotto prodotto, String descrizione) {
+        prodotto.getDescrizioneProdotto().setDescrizione(descrizione);
+    }
+
 }
