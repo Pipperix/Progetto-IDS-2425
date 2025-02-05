@@ -19,8 +19,8 @@ public class ProcessoTrasformazione {
     @Override
     public String toString() {
         return "ProcessoTrasformazione{" +
-                "nome='" + nome + '\'' +
-                ", descrizione='" + descrizione + '\'' +
+                "nome='" + getNome() + '\'' +
+                ", descrizione='" + getDescrizione() + '\'' +
                 '}';
     }
 

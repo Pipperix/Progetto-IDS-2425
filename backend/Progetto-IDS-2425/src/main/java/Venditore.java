@@ -2,7 +2,7 @@ import java.time.LocalDate;
 
 public abstract class Venditore extends UtenteRegistrato{
 
-    // Entrambi gli attributi sono annullabili (?)
+    // Possono essere nullabili (il venditore ha partita iva propria o quella dell'azienda)
     private String partitaIva;
     private Azienda azienda;
 
@@ -23,35 +23,37 @@ public abstract class Venditore extends UtenteRegistrato{
     public void setAzienda(Azienda azienda) { this.azienda = azienda; }
 
     // Creazione Prodotto
-    public void creaProdotto(int id, String nome, DescrizioneProdotto descrizioneProdotto, int quantita) {
-        // Aggiungi prodotto al db
-        // Logica db
-    }
     public void creaProdotto(int id, String nome, String descrizione, double prezzo, int quantita) {
-        Prodotto prodotto = new Prodotto(id, nome, new DescrizioneProdotto(descrizione, prezzo), quantita);
-        // Aggiungi prodotto al db
+        Prodotto prodotto = new Prodotto(id, nome, descrizione, prezzo, quantita);
+        prodotto.setProcessiTrasformazione(null); // Il prodotto non ha processi di trasformazione
+        // Aggiungi 'prodotto' al db
         // Logica db
     }
 
     // Eliminazione Prodotto
     public void eliminaProdotto(Prodotto prodotto) {
-        // Elimina prodotto (prodotto.getId())
+        // Elimina prodotto dal db (prodotto.getId())
         // Logica db
     }
 
-    // Modifica Contenuto del prodotto (descrizione e prezzo)
-    public void modificaProdotto(Prodotto prodotto, String descrizione, double prezzo) {
-        prodotto.setDescrizioneProdotto(new DescrizioneProdotto(descrizione, prezzo));
-    }
-
-    // Modifica Prezzo del prodotto
-    public void modificaPrezzo(Prodotto prodotto, double prezzo) {
-        prodotto.getDescrizioneProdotto().setPrezzo(prezzo);
+    // Modifica Nome del prodotto
+    public void modificaNome(Prodotto prodotto, String nome) {
+        prodotto.setNome(nome);
     }
 
     // Modifica Descrizione del prodotto
     public void modificaDescrizione(Prodotto prodotto, String descrizione) {
-        prodotto.getDescrizioneProdotto().setDescrizione(descrizione);
+        prodotto.setDescrizione(descrizione);
+    }
+
+    // Modifica Prezzo del prodotto
+    public void modificaPrezzo(Prodotto prodotto, double prezzo) {
+        prodotto.setPrezzo(prezzo);
+    }
+
+    // Modifica Quantità del prodotto
+    public void modificaQuantita(Prodotto prodotto, int quantita) {
+        prodotto.setQuantita(quantita);
     }
 
 }

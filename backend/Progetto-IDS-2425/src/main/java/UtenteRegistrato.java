@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 import java.util.List;
 
-public class UtenteRegistrato implements Utente {
+public abstract class UtenteRegistrato implements Utente {
 
     private int id;
     private String username;
@@ -49,16 +49,17 @@ public class UtenteRegistrato implements Utente {
     // Metodo per la visualizzazione dei contenuti (prodotti) presenti nel sistema
     @Override
     public List<Prodotto> visualizzaContenuti() {
-        // Query da db per visualizzare i contenuti (prodotti) presenti nel sistema
+        // Query da db per visualizzare tutti i Prodotti presenti nel sistema
+        // findAll()
         return null;
     }
 
     // Metodo per la visualizzazione della descrizione del prodotto
     @Override
-    public DescrizioneProdotto visualizzaDescrizione(Prodotto prodotto) {
+    public String visualizzaDescrizione(Prodotto prodotto) {
         // Scelgo un prodotto con descrizione da visualizzare
         // Riprendo l'id del prodotto?
-        return prodotto.getDescrizioneProdotto();
+        return prodotto.toString(); // Cosa ritorno?
     }
 
     // Login

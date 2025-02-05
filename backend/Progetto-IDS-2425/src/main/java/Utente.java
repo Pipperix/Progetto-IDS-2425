@@ -6,7 +6,7 @@ public interface Utente {
     List<Prodotto> visualizzaContenuti();
 
     // Metodo per la visualizzazione della descrizione del prodotto
-    DescrizioneProdotto visualizzaDescrizione(Prodotto prodotto);
+    String visualizzaDescrizione(Prodotto prodotto);
 
     // Login (non da implementare)
     boolean autenticazione();

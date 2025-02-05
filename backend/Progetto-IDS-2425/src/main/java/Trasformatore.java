@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.HashSet;
 
 public class Trasformatore extends Venditore {
 
@@ -8,38 +9,35 @@ public class Trasformatore extends Venditore {
         super(id, username, nome, cognome, email, indirizzo, dataDiNascita, partitaIva, azienda);
     }
 
-    // Aggiungi ProcessoTrasformazione
-    public void aggiungiProcessoTrasformazione(ProdottoTrasformato prodotto, String nome, String descrizione) {
-        prodotto.getProcesso().getTrasformazioni().add(new ProcessoTrasformazione(nome, descrizione));
+    // Creazione Prodotto Trasformato
+    public void creaProdottoTrasformato(int id, String nome, String descrizione, double prezzo, int quantita) {
+        Prodotto prodottoTrasformato = new Prodotto(id, nome, descrizione, prezzo, quantita);
+        prodottoTrasformato.setProcessiTrasformazione(new HashSet<>());
     }
 
-    // Aggiungi Certificazione al ProdottoTrasformato
-    public void aggiungiCertificazione(ProdottoTrasformato prodotto, int id, String nome, String descrizione) {
-        prodotto.getDescrizioneProdotto().setCertificazione(new Certificazione(id, nome, descrizione));
+    // Aggiungi Processo di Trasformazione al Prodotto
+    public void aggiungiProcessoTrasformazione(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {
+        prodottoTrasformato.getProcessiTrasformazione().add(processoTrasformazione);
     }
 
-    @Override
-    public void creaProdotto(int id, String nome, DescrizioneProdotto descrizioneProdotto, int quantita) {
-        ProdottoTrasformato prodottoTrasformato = new ProdottoTrasformato(id, nome, descrizioneProdotto, quantita);
-        // Aggiungi ProdottoTrasformato al db
-        // new ProdottoTrasformato(id, nome, descrizioneProdotto, quantita);
+    // Rimuovi Processo di Trasformazione dal Prodotto
+    public void rimuoviProcessoTrasformazione(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {
+        prodottoTrasformato.getProcessiTrasformazione().remove(processoTrasformazione);
     }
 
-    public void eliminaProdotto(ProdottoTrasformato prodotto) {
-        // Elimina prodotto (prodotto.getId())
-        // Logica db
+    // Aggiungi Certificazione al Prodotto
+    public void aggiungiCertificazione(Prodotto prodottoTrasformato, Certificazione certificazione) {
+        prodottoTrasformato.setCertificazione(certificazione);
     }
 
-    public void modificaProdotto(ProdottoTrasformato prodotto, String descrizione, double prezzo) {
-        prodotto.setDescrizioneProdotto(new DescrizioneProdotto(descrizione, prezzo));
+    // Modifica Certificazione del Prodotto
+    public void modificaCertificazione(Prodotto prodottoTrasformato, Certificazione certificazione) {
+        prodottoTrasformato.setCertificazione(certificazione);
     }
 
-    public void modificaPrezzo(ProdottoTrasformato prodotto, double prezzo) {
-        prodotto.getDescrizioneProdotto().setPrezzo(prezzo);
-    }
-
-    public void modificaDescrizione(ProdottoTrasformato prodotto, String descrizione) {
-        prodotto.getDescrizioneProdotto().setDescrizione(descrizione);
+    // Rimuovi Certificazione dal Prodotto
+    public void rimuoviCertificazione(Prodotto prodottoTrasformato) {
+        prodottoTrasformato.setCertificazione(null);
     }
 
 }

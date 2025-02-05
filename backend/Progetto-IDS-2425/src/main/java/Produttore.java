@@ -9,8 +9,17 @@ public class Produttore extends Venditore {
     }
 
     // Aggiungi Certificazione al Prodotto
-    public void aggiungiCertificazione(Prodotto prodotto, int id, String nome, String descrizione) {
-        // Aggiungere certificazione al db
-        prodotto.getDescrizioneProdotto().setCertificazione(new Certificazione(id, nome, descrizione));
+    public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione) {
+        prodotto.setCertificazione(certificazione);
+    }
+
+    // Modifica Certificazione del Prodotto
+    public void modificaCertificazione(Prodotto prodotto, Certificazione certificazione) {
+        prodotto.setCertificazione(certificazione);
+    }
+
+    // Rimuovi Certificazione dal Prodotto
+    public void rimuoviCertificazione(Prodotto prodotto) {
+        prodotto.setCertificazione(null);
     }
 }
