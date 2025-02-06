@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Animatore extends UtenteRegistrato {
+
     private List<Evento> eventiCreati;
 
     public Animatore(int id, String username, String nome, String cognome, String email, Indirizzo indirizzo, LocalDate dataDiNascita) {
@@ -11,7 +12,6 @@ public class Animatore extends UtenteRegistrato {
         this.eventiCreati = new ArrayList<>();
     }
 
-    // Metodo per creare un evento e aggiungerlo alla lista degli eventi creati
     public Evento creaEvento(String nome, String tipo, String descrizione, LocalDateTime dataInizio, LocalDateTime dataFine,
                              Luogo luogo, int capienzaPersone) {
         Evento nuovoEvento = new Evento(nome, tipo, descrizione, dataInizio, dataFine, luogo, capienzaPersone);
@@ -19,7 +19,6 @@ public class Animatore extends UtenteRegistrato {
         return nuovoEvento;
     }
 
-    // Metodo per modificare un evento
     public void modificaEvento(Evento evento, String nuovoNome, String nuovoTipo, String nuovaDescrizione,
                                LocalDateTime nuovaDataInizio, LocalDateTime nuovaDataFine, Luogo nuovoLuogo, int nuovaCapienza) {
         if (eventiCreati.contains(evento)) {
@@ -36,7 +35,6 @@ public class Animatore extends UtenteRegistrato {
         }
     }
 
-    // Metodo per eliminare un evento
     public void eliminaEvento(Evento evento) {
         if (eventiCreati.remove(evento)) {
             System.out.println("Evento eliminato con successo!");
@@ -45,7 +43,7 @@ public class Animatore extends UtenteRegistrato {
         }
     }
 
-    // Metodo per visualizzare tutti gli eventi creati
+    // Metodo per visualizzare tutti gli eventi creati da un animatore
     public void mostraEventiCreati() {
         if (eventiCreati.isEmpty()) {
             System.out.println("Nessun evento creato.");

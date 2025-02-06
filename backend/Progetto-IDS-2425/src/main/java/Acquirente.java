@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Acquirente extends UtenteRegistrato {
+
     Map<Prodotto, Integer> carrello = new HashMap<>();
     private MetodoDiPagamento metodoDiPagamento;
 
@@ -37,6 +38,7 @@ public class Acquirente extends UtenteRegistrato {
         System.out.println("Carrello svuotato.");
     }
 
+    // da capire
     public void selezionaPagamento(MetodoDiPagamento metodo) {
         this.metodoDiPagamento = metodo;
         System.out.println("Metodo di pagamento selezionato: " + metodo);
@@ -47,7 +49,7 @@ public class Acquirente extends UtenteRegistrato {
             System.out.println("Il carrello è vuoto. Aggiungi prodotti prima di confermare l'acquisto.");
         }
 
-        // Aggiorna le quantità disponibili
+        // Aggiorna le quantità disponibili --> logica DB !
         for (Map.Entry<Prodotto, Integer> entry : carrello.entrySet()) {
             Prodotto prodotto = entry.getKey();
             int quantitaRichiesta = entry.getValue();
@@ -66,15 +68,3 @@ public class Acquirente extends UtenteRegistrato {
 
 }
 
-/* metodo per me non necessario per controllare nuovamente la disponibilità dei prodotti
-    for (Map.Entry<Prodotto, Integer> entry : carrello.entrySet()) {
-        Prodotto prodotto = entry.getKey();
-        int quantitaRichiesta = entry.getValue();
-
-            if (quantitaRichiesta > prodotto.getQuantita()) {
-        System.out.println("Errore: la quantità richiesta per " + prodotto.getNome() + " non è più disponibile.");
-        return;
-        }
-        }
-
- */

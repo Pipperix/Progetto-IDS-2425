@@ -8,21 +8,18 @@ public class DescrizioneProdotto {
         this.prezzo = prezzo;
     }
 
+    // Getters
     public String getDescrizione() {
         return descrizione;
     }
+    public double getPrezzo() { return prezzo; }
+
+    // Setters
     public void setDescrizione(String descrizione) {
         if (descrizione == null) {
             throw new IllegalArgumentException("La descrizione non può essere vuota.");
         }
         this.descrizione = descrizione;
-    }
-
-    public double getPrezzo() {
-        if (prezzo < 0) {
-            throw new IllegalArgumentException("Il prezzo non può essere negativo.");
-        }
-        return prezzo;
     }
     public void setPrezzo(double prezzo) {
         this.prezzo = prezzo;

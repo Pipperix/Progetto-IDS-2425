@@ -11,25 +11,26 @@ public class Certificazione {
         this.descrizione = descrizione;
     }
 
+    // Getters
     public int getId() {
         return id;
     }
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return nome;
+    }
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    // Setters
+    public void setId(int id) {
+        this.id = id;
     }
     public void setNome(String nome) {
         if (nome == null) {
             throw new IllegalArgumentException("Il nome non può essere vuoto.");
         }
         this.nome = nome;
-    }
-
-    public String getDescrizione() {
-        return descrizione;
     }
     public void setDescrizione(String descrizione) {
         if (descrizione == null) {
