@@ -5,15 +5,14 @@ public class Indirizzo {
     private String citta;
     private int cap;
     private String via;
-    private int civico;
+    private String civico;
 
-    public Indirizzo(String citta, int cap, String via, int civico) {
+    public Indirizzo(String citta, int cap, String via, String civico) {
         this.citta = Objects.requireNonNull(citta, "La città non può essere nulla.");
         if (cap <= 0) throw new IllegalArgumentException("Il CAP deve essere maggiore di 0.");
         this.cap = cap;
         this.via = Objects.requireNonNull(via, "La via non può essere nulla.");
-        if (civico <= 0) throw new IllegalArgumentException("Il civico deve essere maggiore di 0.");
-        this.civico = cap;
+        this.civico = Objects.requireNonNull(civico, "Il civico non può essere nulla.");
     }
 
     // Getter
@@ -29,7 +28,7 @@ public class Indirizzo {
         return via;
     }
 
-    public int getCivico() {
+    public String getCivico() {
         return civico;
     }
 
@@ -47,9 +46,8 @@ public class Indirizzo {
         this.via = Objects.requireNonNull(via, "La via non può essere nulla.");
     }
 
-    public void setCivico(int civico) {
-        if (civico <= 0) throw new IllegalArgumentException("Il civico deve essere maggiore di 0.");
-        this.civico = cap;
+    public void setCivico(String civico) {
+        this.civico = Objects.requireNonNull(civico, "Il civico non può essere nulla.");
     }
 
 }
