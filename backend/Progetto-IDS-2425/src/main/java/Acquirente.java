@@ -59,11 +59,16 @@ public class Acquirente extends UtenteRegistrato {
         // Creazione dell'oggetto Ordine
         // L'ID dell'ordine è un numero casuale per il momento, sarà poi sostituito da un ID univoco ottenuto
         // attraverso il database
-        Ordine nuovoOrdine = new Ordine(LocalDateTime.now(), (int) (Math.random() * 1000));
+        Ordine nuovoOrdine = new Ordine(LocalDateTime.now(), 001, Map.copyOf(carrello));
         System.out.println("Ordine confermato! Riepilogo:\n" + nuovoOrdine);
 
         // Svuotare il carrello
         svuotaCarrello();
+    }
+
+    // aggiungere una stampa che mi dice anche ora e luogo dell'evento
+    public void prenotaEvento(Evento evento) {
+        System.out.println("Evento prenotato: " + evento);
     }
 
 }

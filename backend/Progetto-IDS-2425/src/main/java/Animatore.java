@@ -42,15 +42,4 @@ public class Animatore extends UtenteRegistrato {
             System.out.println("Errore: L'evento non esiste o non è stato creato da questo animatore.");
         }
     }
-
-    // Metodo per visualizzare tutti gli eventi creati da un animatore
-    public void mostraEventiCreati() {
-        if (eventiCreati.isEmpty()) {
-            System.out.println("Nessun evento creato.");
-        } else {
-            for (Evento evento : eventiCreati) {
-                System.out.println("- " + evento.getNome() + " (" + evento.getDataInizio() + " - " + evento.getDataFine() + ")");
-            }
-        }
-    }
 }
