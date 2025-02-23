@@ -3,6 +3,8 @@ package cs.unicam.filiera_agricola.Prodotti;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Prodotto {
@@ -15,6 +17,9 @@ public class Prodotto {
 
     @OneToOne(mappedBy = "prodotto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Descrizione descrizione;
+
+    @ManyToMany(mappedBy = "prodotti")
+    private Set<PacchettoDiProdotti> pacchetti = new HashSet<>();
 
     public Prodotto() {}
 
@@ -44,6 +49,10 @@ public class Prodotto {
         return descrizione;
     }
 
+    public Set<PacchettoDiProdotti> getPacchetti() {
+        return pacchetti;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -59,5 +68,17 @@ public class Prodotto {
     public void setDescrizione(Descrizione descrizione) {
         this.descrizione = descrizione;
         descrizione.setProdotto(this); // Imposta il riferimento bidirezionale
+    }
+
+    public void setPacchetti(Set<PacchettoDiProdotti> pacchetti) {
+        this.pacchetti = pacchetti;
+    }
+
+    public void setCertificazione(Certificazione certificazione) {
+        this.descrizione.aggiungiCertificazione(certificazione);
+    }
+
+    public void setProcessoTrasformazione(ProcessoTrasformazione processoTrasformazione) {
+        this.descrizione.aggiungiProcessoTrasformazione(processoTrasformazione);
     }
 }

@@ -24,6 +24,10 @@ public class Descrizione {
     @JsonManagedReference
     private List<Certificazione> certificazioni = new ArrayList<>();
 
+    @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ProcessoTrasformazione> processiTrasformazione = new ArrayList<>();
+
     public Descrizione() {}
 
     public Descrizione(String descrizione, int quantita, boolean approvato) {
@@ -48,6 +52,10 @@ public class Descrizione {
         return certificazioni;
     }
 
+    public List<ProcessoTrasformazione> getProcessiTrasformazione() {
+        return processiTrasformazione;
+    }
+
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
@@ -68,8 +76,27 @@ public class Descrizione {
         this.certificazioni = certificazioni;
     }
 
+    public void setProcessiTrasformazione(List<ProcessoTrasformazione> processiTrasformazione) {
+        this.processiTrasformazione = processiTrasformazione;
+    }
+
     public void aggiungiCertificazione(Certificazione certificazione) {
         certificazioni.add(certificazione);
         certificazione.setDescrizione(this);
     }
+
+//    public void rimuoviCertificazione(Certificazione certificazione) {
+//        certificazioni.remove(certificazione);
+//        certificazione.setDescrizione(null);
+//    }
+
+    public void aggiungiProcessoTrasformazione(ProcessoTrasformazione processo) {
+        processiTrasformazione.add(processo);
+        processo.setDescrizione(this);
+    }
+
+//    public void rimuoviProcessoTrasformazione(ProcessoTrasformazione processo) {
+//        processiTrasformazione.remove(processo);
+//        processo.setDescrizione(null);
+//    }
 }

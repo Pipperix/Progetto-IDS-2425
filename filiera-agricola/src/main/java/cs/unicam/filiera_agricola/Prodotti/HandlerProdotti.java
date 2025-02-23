@@ -2,7 +2,6 @@ package cs.unicam.filiera_agricola.Prodotti;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +11,17 @@ import java.time.LocalDate;
 public class HandlerProdotti {
 
     @Autowired
-    private ProdottiListRepository prodottiListRepository;
+    private ProdottiRepository prodottiRepository;
     @Autowired
-    private DescrizioniListRepository descrizioniListRepository;
+    private DescrizioniRepository descrizioniRepository;
     @Autowired
-    private CertificazioniListRepository certificazioniListRepository;
+    private CertificazioniRepository certificazioniRepository;
+    @Autowired
+    private ProcessiTrasformazioneRepository processiTrasformazioneRepository;
 
     @PostConstruct
     public void init() {
+        // Prodotto
         Prodotto prodotto = new Prodotto("Pomodoro", 1.5, LocalDate.now());
         Descrizione descrizione = new Descrizione("Pomodoro rosso", 10, true);
         Certificazione certificazione1 = new Certificazione("Biologico");
@@ -29,22 +31,49 @@ public class HandlerProdotti {
         descrizione.aggiungiCertificazione(certificazione1);
         descrizione.aggiungiCertificazione(certificazione2);
 
-        prodottiListRepository.save(prodotto);
-        certificazioniListRepository.save(certificazione1);
-        certificazioniListRepository.save(certificazione2);
+        prodottiRepository.save(prodotto);
+//        certificazioniRepository.save(certificazione1);
+//        certificazioniRepository.save(certificazione2);
+
+        // Prodotto trasformato
+        Prodotto prodottoTrasformato = new Prodotto("Passata di pomodoro", 2.5, LocalDate.now());
+        Descrizione descrizioneTrasformata = new Descrizione("Passata di pomodoro", 10, true);
+        Certificazione certificazioneTrasformata1 = new Certificazione("Biologico");
+        ProcessoTrasformazione processoTrasformazione = new ProcessoTrasformazione("Passata di pomodoro", "Pomodoro rosso");
+
+        prodottoTrasformato.setDescrizione(descrizioneTrasformata);
+        descrizioneTrasformata.aggiungiCertificazione(certificazioneTrasformata1);
+        descrizioneTrasformata.aggiungiProcessoTrasformazione(processoTrasformazione);
+
+        prodottiRepository.save(prodottoTrasformato);
+//        certificazioniRepository.save(certificazioneTrasformata1);
+//        processiTrasformazioneRepository.save(processoTrasformazione);
+
+        // Prodotto costruito con il builder
+        Prodotto prodottoBuilder = new ProdottoSingoloBuilder()
+                .setNome("Zucchina")
+                .setPrezzo(1.0)
+                .setDataScadenza(LocalDate.now())
+                .setDescrizione(new Descrizione("Zucchina verde", 10, true))
+                .setCertificazione(new Certificazione("Biologico"))
+                .build();
+
+        prodottiRepository.save(prodottoBuilder);
+
+        // Pacchetto di prodotti
     }
 
     // Ritorna tutti i prodotti
     @GetMapping(value = "/prodotti")
     public ResponseEntity<Object> getProdotti() {
-        return ResponseEntity.ok(prodottiListRepository.findAll());
+        return ResponseEntity.ok(prodottiRepository.findAll());
     }
 
     // Ritorna dettaglio prodotto
     @GetMapping(value = "/prodotti/{id}")
     public ResponseEntity<Object> getProdotto(@PathVariable int id) {
-        if (prodottiListRepository.existsById(id))
-            return ResponseEntity.ok(prodottiListRepository.findById(id).get());
+        if (prodottiRepository.existsById(id))
+            return ResponseEntity.ok(prodottiRepository.findById(id).get());
         else
             return ResponseEntity.badRequest().body("Prodotto non esistente");
     }
@@ -52,8 +81,8 @@ public class HandlerProdotti {
     // Aggiunge un prodotto
     @PostMapping(value = "/addProdotto")
     public ResponseEntity<Object> addProdotto(@RequestBody Prodotto prodotto) {
-        if (!prodottiListRepository.existsById(prodotto.getId())) {
-            prodottiListRepository.save(prodotto);
+        if (!prodottiRepository.existsById(prodotto.getId())) {
+            prodottiRepository.save(prodotto);
             return ResponseEntity.ok("Prodotto aggiunto");
         } else
             return ResponseEntity.badRequest().body("Prodotto già esistente");
@@ -62,8 +91,8 @@ public class HandlerProdotti {
     // Elimina un prodotto
     @DeleteMapping(value = "/prodotti/{id}")
     public ResponseEntity<Object> deleteProdotto(@PathVariable int id) {
-        if (prodottiListRepository.existsById(id)) {
-            prodottiListRepository.deleteById(id);
+        if (prodottiRepository.existsById(id)) {
+            prodottiRepository.deleteById(id);
             return ResponseEntity.ok("Prodotto eliminato");
         } else
             return ResponseEntity.badRequest().body("Prodotto non esistente");
@@ -72,9 +101,9 @@ public class HandlerProdotti {
     // Aggiorna un prodotto
     @PutMapping(value = "/prodotti/{id}")
     public ResponseEntity<Object> updateProdotto(@PathVariable int id, @RequestBody Prodotto prodotto) {
-        if (prodottiListRepository.existsById(id)) {
+        if (prodottiRepository.existsById(id)) {
             // prodottiListRepository.deleteById(id);
-            prodottiListRepository.save(prodotto);
+            prodottiRepository.save(prodotto);
             return ResponseEntity.ok("Prodotto aggiornato");
         } else
             return ResponseEntity.badRequest().body("Prodotto non esistente");

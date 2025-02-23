@@ -1,27 +1,47 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
-public class ProcessoTrasformazione {
-    private String nome;
-    private String descrizione;
+import jakarta.persistence.*;
 
-    public ProcessoTrasformazione(String nome, String descrizione) {
+@Entity
+public class ProcessoTrasformazione {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String nome;
+    private String dettagliProcesso;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "descrizione_id")
+    private Descrizione descrizione;
+
+    public ProcessoTrasformazione() {}
+
+    public ProcessoTrasformazione(String nome, String dettagliProcesso) {
         this.nome = nome;
-        this.descrizione = descrizione;
+        this.dettagliProcesso = dettagliProcesso;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public String getDescrizione() {
-        return descrizione;
+    public String getDettagliProcesso() {
+        return dettagliProcesso;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setDescrizione(String descrizione) {
+    public void setDettagliProcesso(String dettagliProcesso) {
+        this.dettagliProcesso = dettagliProcesso;
+    }
+
+    public void setDescrizione(Descrizione descrizione) {
         this.descrizione = descrizione;
     }
 
