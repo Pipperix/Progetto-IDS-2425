@@ -2,7 +2,7 @@ package cs.unicam.filiera_agricola.Vendita;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public Posizione {
+public class Posizione {
     private double latitudine;
     private double longitudine;
 

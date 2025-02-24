@@ -8,7 +8,7 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-public Distributore extends Venditore{
+public class Distributore extends Venditore{
     @OneToMany(mappedBy = "pacchetto_id", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<PacchettoDiProdotti> pacchettiCreati = new HashSet<>();

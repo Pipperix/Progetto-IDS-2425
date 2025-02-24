@@ -9,7 +9,7 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-public Produttore extends Venditore(){
+public class Produttore extends Venditore(){
     @OneToMany(mappedBy = "certificazione_id", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<Certificazione> certificazioniCreate = new HashSet<>();

@@ -2,7 +2,7 @@ package cs.unicam.filiera_agricola.Vendita;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public Indirizzo{
+public class Indirizzo{
     private String via;
     private String civico;
     private String cap;

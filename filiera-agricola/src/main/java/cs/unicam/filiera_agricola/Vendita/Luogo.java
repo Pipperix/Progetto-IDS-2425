@@ -2,7 +2,7 @@ package cs.unicam.filiera_agricola.Vendita;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public Luogo{
+public class Luogo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

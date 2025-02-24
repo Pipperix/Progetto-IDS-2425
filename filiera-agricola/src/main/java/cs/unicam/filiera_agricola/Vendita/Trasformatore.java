@@ -6,7 +6,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-public Trasformatore extends Venditore{
+public class Trasformatore extends Venditore{
     public Trasformatore() {}
 
     public Trasformatore(String partitaIva) {
