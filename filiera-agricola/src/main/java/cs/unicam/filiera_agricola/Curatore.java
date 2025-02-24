@@ -3,6 +3,7 @@ package cs.unicam.filiera_agricola;
 import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
 import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
+import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ public class Curatore extends UtenteRegistrato {
     // costruttore vuoto necessario per JPA
     public Curatore() {}
 
-    public Curatore(String username, String nome, String cognome, String email, String password, Indirizzo indirizzo,
+    public Curatore(String username, String nome, String cognome, String email, String password, Luogo luogo,
                     LocalDate dataDiNascita) {
-        super(username, nome, cognome, email, password, indirizzo, dataDiNascita, Ruolo.CURATORE);
+        super(username, nome, cognome, email, password, luogo, dataDiNascita, Ruolo.CURATORE);
     }
 
     @Transactional // garantisce che l'approvazione sia salvata correttamente

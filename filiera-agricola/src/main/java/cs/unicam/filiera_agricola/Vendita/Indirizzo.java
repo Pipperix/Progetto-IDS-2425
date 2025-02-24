@@ -1,4 +1,5 @@
 package cs.unicam.filiera_agricola.Vendita;
+
 import jakarta.persistence.Embeddable;
 
 @Embeddable
@@ -7,6 +8,8 @@ public class Indirizzo{
     private String civico;
     private String cap;
     private String città;
+
+    public Indirizzo() {}
 
     public Indirizzo(String via, String civico, String cap, String città){
         this.via = via;

@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Vendita;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import cs.unicam.filiera_agricola.Prodotti.PacchettoDiProdotti;
 import jakarta.persistence.*;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import java.util.HashSet;
@@ -19,8 +20,8 @@ public class Distributore extends Venditore{
         super(partitaIva); // Richiama il costruttore della superclasse Venditore
     }
 
-    public void creaPacchettoDiProdotti(Set<Prodotti> prodotti){
-        PacchettoDiProdotti pacchetto = new PacchettoDiProdotti(nome, prezzo, prodotti, this);
+    public void creaPacchettoDiProdotti(Set<Prodotto> prodotti){
+        PacchettoDiProdotti pacchetto = new PacchettoDiProdotti("nome");
         pacchettiCreati.add(pacchetto);
     }
     public void eliminaPacchetto(PacchettoDiProdotti pacchetto){

@@ -9,25 +9,28 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-public class Produttore extends Venditore(){
+public class Produttore extends Venditore {
     @OneToMany(mappedBy = "certificazione_id", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<Certificazione> certificazioniCreate = new HashSet<>();
+    @Id
+    private int id;
 
-    public Produttore() {}
+    public Produttore() {
+    }
 
     public Produttore(String partitaIva) {
         super(partitaIva);
     }
 
-    public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione){
+    public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione) {
         if (prodotto.getDescrizione() != null) {
             prodotto.getDescrizione().aggiungiCertificazione(certificazione);
             certificazioniCreate.add(certificazione);
         }
     }
 
-    public void modificaCertificazione(Prodotto prodotto, Certificazione certificazione){
+    public void modificaCertificazione(Prodotto prodotto, Certificazione nuovaCertificazione) {
         if (prodotto.getDescrizione() != null) {
             for (Certificazione cert : prodotto.getDescrizione().getCertificazioni()) {
                 if (cert.getId() == nuovaCertificazione.getId()) {
@@ -38,10 +41,18 @@ public class Produttore extends Venditore(){
         }
     }
 
-    public void rimuoviCertificazione(Prodotto prodotto, Certificazione certificazione){
+    public void rimuoviCertificazione(Prodotto prodotto, Certificazione certificazione) {
         if (prodotto.getDescrizione() != null) {
             prodotto.getDescrizione().getCertificazioni().remove(certificazione);
             certificazioniCreate.remove(certificazione);
         }
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

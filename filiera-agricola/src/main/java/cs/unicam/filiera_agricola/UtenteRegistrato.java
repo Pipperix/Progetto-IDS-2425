@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola;
 
 import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
+import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class UtenteRegistrato implements Utente {
     private String password;
     private LocalDate dataDiNascita;
     @Embedded
-    private Indirizzo indirizzo;
+    private Luogo luogo;
     @Column(nullable = false)
     private boolean autorizzato = false;
     @Enumerated(EnumType.STRING) // Salviamo il ruolo come stringa nel database
@@ -32,14 +33,14 @@ public class UtenteRegistrato implements Utente {
     public UtenteRegistrato() {}
 
     // Costruttore
-    public UtenteRegistrato(String username, String nome, String cognome, String email, String password, Indirizzo indirizzo,
+    public UtenteRegistrato(String username, String nome, String cognome, String email, String password, Luogo luogo,
                             LocalDate dataDiNascita, Ruolo ruolo) {
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
-        this.indirizzo = indirizzo;
+        this.luogo = luogo;
         this.dataDiNascita = dataDiNascita;
         this.autorizzato = false; // non necessario
         this.ruolo = ruolo;
@@ -96,7 +97,7 @@ public class UtenteRegistrato implements Utente {
     public String getNome() { return nome; }
     public String getCognome() { return cognome; }
     public String getEmail() { return email; }
-    public Indirizzo getIndirizzo() { return indirizzo; }
+    public Luogo getLuogo() { return luogo; }
     public LocalDate getDataDiNascita() { return dataDiNascita; }
     public String getPassword() { return password; }
     public Ruolo getRuolo() { return ruolo; }
@@ -106,7 +107,7 @@ public class UtenteRegistrato implements Utente {
     public void setNome(String nome) { this.nome = nome; }
     public void setCognome(String cognome) { this.cognome = cognome; }
     public void setEmail(String email) { this.email = email; }
-    public void setIndirizzo(Indirizzo indirizzo) { this.indirizzo = indirizzo; }
+    public void setLuogo(Luogo indirizzo) { this.luogo = indirizzo; }
     public void setDataDiNascita(LocalDate dataDiNascita) { this.dataDiNascita = dataDiNascita; }
     public void setPassword(String password) { this.password = password; }
     public void setRuolo(Ruolo ruolo) { this.ruolo = ruolo; }

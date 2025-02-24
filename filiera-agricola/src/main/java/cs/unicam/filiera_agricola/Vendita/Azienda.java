@@ -6,7 +6,7 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-public class Azienda{
+public class Azienda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

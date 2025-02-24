@@ -1,5 +1,8 @@
 package cs.unicam.filiera_agricola;
 
+import cs.unicam.filiera_agricola.Vendita.Indirizzo;
+import cs.unicam.filiera_agricola.Vendita.Luogo;
+import cs.unicam.filiera_agricola.Vendita.Posizione;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -97,22 +100,19 @@ public class HandlerEventi {
     @PostConstruct
     public void init() {
         if (eventoRepository.count() == 0) { // Evita duplicati
-            Indirizzo indirizzo1 = new Indirizzo("Via Roma", "1", "Roma", 60022);
-            Indirizzo indirizzo2 = new Indirizzo("Via Firenze", "2", "Firenze", 50023);
+            Indirizzo indirizzo1 = new Indirizzo("Via Roma", "1", "60022", "Roma" );
+            Indirizzo indirizzo2 = new Indirizzo("Via Firenze", "2", "50023", "Firenze");
 
             Posizione posizione1 = new Posizione(43.717899, 10.408900);
             Posizione posizione2 = new Posizione(43.717899, 10.408900);
 
-            //Luogo luogo1 = new Luogo("Piazza Centrale", indirizzo1, posizione1);
-            //Luogo luogo2 = new Luogo("Cantina Rossi", indirizzo2, posizione2);
-
             Evento evento1 = new Evento("Fiera Bio", "Agricoltura", "Esposizione di prodotti biologici",
                     LocalDateTime.now().plusDays(10), LocalDateTime.now().plusDays(11),
-                    new Luogo("Piazza Centrale", indirizzo1, posizione1), 100);
+                    new Luogo("Piazza Centrale", posizione1, indirizzo1), 100);
 
             Evento evento2 = new Evento("Degustazione Vini", "Enologia", "Evento per amanti del vino",
                     LocalDateTime.now().plusDays(5), LocalDateTime.now().plusDays(6),
-                    new Luogo("Cantina Rossi", indirizzo2, posizione2), 50);
+                    new Luogo("Cantina Rossi", posizione2, indirizzo2), 50);
 
             eventoRepository.save(evento1);
             eventoRepository.save(evento2);

@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola;
 
+import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;

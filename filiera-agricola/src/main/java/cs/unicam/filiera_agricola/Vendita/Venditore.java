@@ -2,14 +2,16 @@ package cs.unicam.filiera_agricola.Vendita;
 
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import cs.unicam.filiera_agricola.UtenteRegistrato;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Venditore extends UtenteRegistrato{
+public class Venditore extends UtenteRegistrato {
     private String partitaIva;
 
     @OneToOne(optional = true, cascade = CascadeType.ALL)
@@ -18,16 +20,14 @@ public class Venditore extends UtenteRegistrato{
 
     @OneToMany(mappedBy = "prodotto_id", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<Prodotto> prodottiCreati = HashSet<>();
+    private Set<Prodotto> prodottiCreati = new HashSet<>();
+    @Id
+    private int id;
 
     public Venditore() {}
 
     public Venditore(String partitaIva) {
         this.partitaIva = partitaIva;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getPartitaIva() {
@@ -38,7 +38,7 @@ public class Venditore extends UtenteRegistrato{
         this.partitaIva = partitaIva;
     }
 
-    public List<Prodotto> getProdottiCreati() {
+    public Set<Prodotto> getProdottiCreati() {
         return prodottiCreati;
     }
 
@@ -70,5 +70,13 @@ public class Venditore extends UtenteRegistrato{
         if (prodotto.getDescrizione() != null) {
             prodotto.getDescrizione().setQuantita(quantita);
         }
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

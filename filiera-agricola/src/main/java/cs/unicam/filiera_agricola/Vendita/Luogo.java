@@ -1,20 +1,15 @@
 package cs.unicam.filiera_agricola.Vendita;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 @Embeddable
 public class Luogo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "posizione_id", referencedColumnName = "id")
+    @Embedded
     private Posizione posizione;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "indirizzo_id", referencedColumnName = "id")
+    @Embedded
     private Indirizzo indirizzo;
 
     public Luogo() {}
