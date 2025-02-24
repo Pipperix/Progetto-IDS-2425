@@ -29,6 +29,10 @@ public class Certificazione {
         return nome;
     }
 
+    public Descrizione getDescrizione() {
+        return descrizione;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }

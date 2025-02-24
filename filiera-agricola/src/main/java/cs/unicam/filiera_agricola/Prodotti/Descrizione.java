@@ -1,10 +1,13 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Descrizione {
@@ -18,15 +21,16 @@ public class Descrizione {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
+    @JsonBackReference
     private Prodotto prodotto;
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
-    private List<Certificazione> certificazioni = new ArrayList<>();
+    private Set<Certificazione> certificazioni = new HashSet<>();
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
-    private List<ProcessoTrasformazione> processiTrasformazione = new ArrayList<>();
+    private Set<ProcessoTrasformazione> processiTrasformazione = new HashSet<>();
 
     public Descrizione() {}
 
@@ -48,11 +52,11 @@ public class Descrizione {
         return approvato;
     }
 
-    public List<Certificazione> getCertificazioni() {
+    public Set<Certificazione> getCertificazioni() {
         return certificazioni;
     }
 
-    public List<ProcessoTrasformazione> getProcessiTrasformazione() {
+    public Set<ProcessoTrasformazione> getProcessiTrasformazione() {
         return processiTrasformazione;
     }
 
@@ -72,11 +76,11 @@ public class Descrizione {
         this.prodotto = prodotto;
     }
 
-    public void setCertificazioni(List<Certificazione> certificazioni) {
+    public void setCertificazioni(Set<Certificazione> certificazioni) {
         this.certificazioni = certificazioni;
     }
 
-    public void setProcessiTrasformazione(List<ProcessoTrasformazione> processiTrasformazione) {
+    public void setProcessiTrasformazione(Set<ProcessoTrasformazione> processiTrasformazione) {
         this.processiTrasformazione = processiTrasformazione;
     }
 

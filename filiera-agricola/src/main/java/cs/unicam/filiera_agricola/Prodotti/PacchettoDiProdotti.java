@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -18,6 +19,7 @@ public class PacchettoDiProdotti {
             joinColumns = @JoinColumn(name = "pacchetto_id"), // Colonna per PacchettoDiProdotti
             inverseJoinColumns = @JoinColumn(name = "prodotto_id") // Colonna per Prodotto
     )
+    @JsonManagedReference
     private Set<Prodotto> prodotti = new HashSet<>();
 
     public PacchettoDiProdotti() {}
@@ -51,8 +53,8 @@ public class PacchettoDiProdotti {
         prodotto.getPacchetti().add(this);
     }
 
-//    public void rimuoviProdotto(Prodotto prodotto) {
-//        this.prodotti.remove(prodotto);
-//        prodotto.getPacchetti().remove(this);
-//    }
+    public void rimuoviProdotto(Prodotto prodotto) {
+        this.prodotti.remove(prodotto);
+        prodotto.getPacchetti().remove(this);
+    }
 }
