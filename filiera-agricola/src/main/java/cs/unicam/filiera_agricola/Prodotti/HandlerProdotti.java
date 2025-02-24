@@ -151,12 +151,32 @@ public class HandlerProdotti {
             return ResponseEntity.badRequest().body("Pacchetto non esistente");
     }
 
+    // Aggiunge un pacchetto di prodotti
+    @PostMapping(value = "/addPacchetto")
+    public ResponseEntity<Object> addPacchetto(@RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
+        if (!pacchettiDiProdottiRepository.existsById(pacchettoDiProdotti.getId())) {
+            pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
+            return ResponseEntity.ok("Pacchetto aggiunto");
+        } else
+            return ResponseEntity.badRequest().body("Pacchetto già esistente");
+    }
+
     // Elimina un pacchetto di prodotti
     @DeleteMapping(value = "/pacchetti/{id}")
     public ResponseEntity<Object> deletePacchetto(@PathVariable int id) {
         if (pacchettiDiProdottiRepository.existsById(id)) {
             pacchettiDiProdottiRepository.deleteById(id);
             return ResponseEntity.ok("Pacchetto eliminato");
+        } else
+            return ResponseEntity.badRequest().body("Pacchetto non esistente");
+    }
+
+    // Aggiorna un pacchetto di prodotti
+    @PutMapping(value = "/pacchetti/{id}")
+    public ResponseEntity<Object> updatePacchetto(@PathVariable int id, @RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
+        if (pacchettiDiProdottiRepository.existsById(id)) {
+            pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
+            return ResponseEntity.ok("Pacchetto aggiornato");
         } else
             return ResponseEntity.badRequest().body("Pacchetto non esistente");
     }
@@ -178,6 +198,33 @@ public class HandlerProdotti {
         } else {
             return ResponseEntity.badRequest().body("Prodotto non trovato.");
         }
+    }
+
+    // VENDITORE
+    // @Transactional
+    // Modifica quantità di un prodotto
+    @PutMapping(value = "/prodotti/{id}/quantita")
+    public ResponseEntity<String> modificaQuantita(@PathVariable int id, @RequestBody int quantita) {
+        Optional<Prodotto> prodottoOpt = prodottiRepository.findById(id);
+        if (prodottoOpt.isPresent()) {
+            Prodotto prodotto = prodottoOpt.get();
+            prodotto.getDescrizione().setQuantita(quantita);
+            prodottiRepository.save(prodotto);
+            return ResponseEntity.ok("Quantità modificata con successo.");
+        } else {
+            return ResponseEntity.badRequest().body("Prodotto non trovato.");
+        }
+    }
+
+    // Rimuovi Prodotti Scaduti
+    @DeleteMapping(value = "/prodotti/scaduti")
+    public ResponseEntity<String> rimuoviProdottiScaduti() {
+        prodottiRepository.findAll().forEach(prodotto -> {
+            if (prodotto.getDataScadenza().isBefore(LocalDate.now())) {
+                prodottiRepository.delete(prodotto);
+            }
+        });
+        return ResponseEntity.ok("Prodotti scaduti rimossi con successo.");
     }
 
 }
