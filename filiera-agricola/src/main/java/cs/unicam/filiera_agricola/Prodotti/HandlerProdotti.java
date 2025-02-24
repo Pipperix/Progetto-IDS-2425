@@ -1,7 +1,10 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
+import cs.unicam.filiera_agricola.Utenti.UtenteRepository;
+import cs.unicam.filiera_agricola.Vendita.Venditore;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
+import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,8 @@ public class HandlerProdotti {
     private CertificazioniRepository certificazioniRepository;
     @Autowired
     private ProcessiTrasformazioneRepository processiTrasformazioneRepository;
+    @Autowired
+    private UtenteRepository utenteRepository;
 
     private static HandlerProdotti instance = new HandlerProdotti();
 
@@ -31,6 +36,10 @@ public class HandlerProdotti {
 
     @PostConstruct
     public void init() {
+
+        //Venditore venditore1 = new Venditore("username", "nome", "cognome", "email", "password", null, "1234567890");
+        //utenteRepository.save(venditore1);
+
         // Prodotto
         Prodotto prodotto = new Prodotto("Pomodoro", 1.5, LocalDate.now());
         Descrizione descrizione = new Descrizione("Pomodoro rosso", 10, true);
@@ -214,17 +223,6 @@ public class HandlerProdotti {
         } else {
             return ResponseEntity.badRequest().body("Prodotto non trovato.");
         }
-    }
-
-    // Rimuovi Prodotti Scaduti
-    @DeleteMapping(value = "/prodotti/scaduti")
-    public ResponseEntity<String> rimuoviProdottiScaduti() {
-        prodottiRepository.findAll().forEach(prodotto -> {
-            if (prodotto.getDataScadenza().isBefore(LocalDate.now())) {
-                prodottiRepository.delete(prodotto);
-            }
-        });
-        return ResponseEntity.ok("Prodotti scaduti rimossi con successo.");
     }
 
 }

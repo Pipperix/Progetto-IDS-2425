@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import cs.unicam.filiera_agricola.Vendita.Distributore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -21,6 +22,10 @@ public class PacchettoDiProdotti {
     )
     @JsonManagedReference
     private Set<Prodotto> prodotti = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "distributore_id") // Foreign key nella tabella PacchettoDiProdotti
+    private Distributore distributore;
 
     public PacchettoDiProdotti() {}
 

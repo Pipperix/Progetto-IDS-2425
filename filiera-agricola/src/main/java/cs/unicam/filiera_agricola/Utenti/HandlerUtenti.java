@@ -1,4 +1,4 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Utenti;
 
 import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
@@ -7,18 +7,19 @@ import cs.unicam.filiera_agricola.Vendita.Luogo;
 import cs.unicam.filiera_agricola.Vendita.Posizione;
 import cs.unicam.filiera_agricola.Vendita.Venditore;
 import jakarta.annotation.PostConstruct;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
     @RestController
     @RequestMapping("/utenti")
+    //@Service
     public class HandlerUtenti {
 
         private static HandlerUtenti instance = new HandlerUtenti();
@@ -46,6 +47,7 @@ import java.util.Optional;
 
         @PostMapping(value = "/registrazione")
         public ResponseEntity<Object> registrazione(@RequestBody UtenteRegistrato nuovoUtente) {
+        //public ResponseEntity<Object> registrazione(UtenteRegistrato nuovoUtente) {
             // Controllo se username è già in uso
             if (utenteRepository.findByUsername(nuovoUtente.getUsername()).isPresent()) {
                 return ResponseEntity.badRequest().body("Utente già registrato. Esegui l'autenticazione");
@@ -66,7 +68,8 @@ import java.util.Optional;
 
         @PostMapping("/login")
         public ResponseEntity<Object> autenticazione(@RequestParam String username, @RequestParam String password) {
-            Optional<UtenteRegistrato> user = utenteRepository.findByUsername(username);
+        //public ResponseEntity<Object> autenticazione(String username, String password) {
+                Optional<UtenteRegistrato> user = utenteRepository.findByUsername(username);
             if (user.isPresent() && user.get().getPassword().equals(password)) {
                 return ResponseEntity.ok("Login effettuato");
             }
@@ -75,7 +78,8 @@ import java.util.Optional;
 
         @PostMapping("/logout")
         public ResponseEntity<Object> disconnessione(@RequestParam String username) {
-            Optional<UtenteRegistrato> user = utenteRepository.findByUsername(username);
+        //public ResponseEntity<Object> disconnessione(String username) {
+                Optional<UtenteRegistrato> user = utenteRepository.findByUsername(username);
             if (user.isPresent()) {
                 return ResponseEntity.ok("Logout effettuato");
             }
@@ -84,6 +88,7 @@ import java.util.Optional;
 
         @PutMapping("/modifica-dati/{id}")
         public ResponseEntity<String> modificaDatiUtente(@PathVariable int id, @RequestBody UtenteRegistrato nuovoUtente) {
+        //public ResponseEntity<String> modificaDatiUtente(int id, UtenteRegistrato nuovoUtente) {
             // Recupera l'utente dal database
             Optional<UtenteRegistrato> utenteOpt = utenteRepository.findById(id);
 
@@ -108,9 +113,6 @@ import java.util.Optional;
                 }
                 if (nuovoUtente.getLuogo() != null) {
                     utente.setLuogo(nuovoUtente.getLuogo());  // Modifica l'indirizzo
-                }
-                if (nuovoUtente.getDataDiNascita() != null) {
-                    utente.setDataDiNascita(nuovoUtente.getDataDiNascita());  // Modifica la data di nascita
                 }
                 // Salva l'utente aggiornato
                 utenteRepository.save(utente);
@@ -164,12 +166,13 @@ import java.util.Optional;
                 Posizione posizione2 = new Posizione(43.717899, 10.408900);
 
                 UtenteRegistrato utente1 = new UtenteRegistrato("chiamer", "Chiara", "Medeiros",
-                        "chiara.medei@libero.it", "passwordkia", new Luogo("Cantiani SRL", posizione1, indirizzo1),
-                        LocalDate.of(2003, 5, 6), Ruolo.PRODUTTORE);
+                        "chiara.medei@libero.it", "passwordkia", new Luogo("Cantiani SRL",
+                        posizione1, indirizzo1), Ruolo.PRODUTTORE);
+                        //LocalDate.of(2003, 5, 6)
 
                 UtenteRegistrato utente2 = new UtenteRegistrato("pipperix", "Fabio", "Fazio",
-                        "fabietto68@libero.it", "thegreaterone", new Luogo("Gazzettino s.p.a.", posizione2, indirizzo2),
-                        LocalDate.of(1968, 3, 19), Ruolo.TRASFORMATORE);
+                        "fabietto68@libero.it", "thegreaterone", new Luogo("Gazzettino s.p.a.",
+                        posizione2, indirizzo2), Ruolo.TRASFORMATORE);
 
                 utenteRepository.save(utente1);
                 utenteRepository.save(utente2);

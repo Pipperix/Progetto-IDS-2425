@@ -20,7 +20,7 @@ public class Ordine {
     @MapKeyColumn(name = "tipo")
     @Column(name = "quantita")
     @MapKeyEnumerated(EnumType.STRING)
-    private Map<Object, Integer> prodotti = new HashMap<>();
+    private Map<Prodotto, Integer> prodotti = new HashMap<>();
 
     @ManyToOne
     @JoinColumn(name = "acquirente_id", nullable = false)
@@ -42,7 +42,7 @@ public class Ordine {
         return istante;
     }
 
-    public Map<Object, Integer> getProdotti() {
+    public Map<Prodotto, Integer> getProdotti() {
         return prodotti;
     }
 
@@ -54,7 +54,7 @@ public class Ordine {
         this.istante = istante;
     }
 
-    public void setProdotti(Map<Object, Integer> prodotti) {
+    public void setProdotti(Map<Prodotto, Integer> prodotti) {
         this.prodotti = prodotti;
     }
 
@@ -62,8 +62,11 @@ public class Ordine {
         this.acquirente = acquirente;
     }
 
+    /*
     // Metodo di utilità per aggiungere un prodotto/pacchetto all'ordine
     public void aggiungiProdottoPacchetto(Object prodotto, int quantita) {
         this.prodotti.put(prodotto, quantita);
     }
+
+     */
 }

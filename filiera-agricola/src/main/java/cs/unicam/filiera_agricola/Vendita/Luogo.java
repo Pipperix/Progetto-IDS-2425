@@ -3,9 +3,9 @@ import jakarta.persistence.*;
 
 @Embeddable
 public class Luogo{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    //private Long id;
     private String nome;
     @Embedded
     private Posizione posizione;
@@ -19,7 +19,7 @@ public class Luogo{
         this.posizione = posizione;
         this.indirizzo = indirizzo;
     }
-
+/*
     public Long getId() {
         return id;
     }
@@ -27,6 +27,8 @@ public class Luogo{
     public void setId(Long id) {
         this.id = id;
     }
+
+ */
 
     public String getNome() {
         return nome;

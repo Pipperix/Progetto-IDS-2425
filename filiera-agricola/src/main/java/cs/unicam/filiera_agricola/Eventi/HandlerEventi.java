@@ -1,4 +1,4 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Eventi;
 
 import cs.unicam.filiera_agricola.Vendita.Indirizzo;
 import cs.unicam.filiera_agricola.Vendita.Luogo;

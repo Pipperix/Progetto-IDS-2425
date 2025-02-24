@@ -10,14 +10,15 @@ import jakarta.persistence.*;
 
 @Entity
 public class Distributore extends Venditore{
-    @OneToMany(mappedBy = "pacchetto_id", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "distributore", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<PacchettoDiProdotti> pacchettiCreati = new HashSet<>();
 
     public Distributore() {}
 
-    public Distributore(String partitaIva) {
-        super(partitaIva); // Richiama il costruttore della superclasse Venditore
+    public Distributore(String username, String nome, String cognome, String email, String password, Luogo luogo, String partitaIva) {
+        super(username, nome, cognome, email, password, luogo, partitaIva);
     }
 
     public void creaPacchettoDiProdotti(Set<Prodotto> prodotti){
@@ -30,12 +31,16 @@ public class Distributore extends Venditore{
     public void modificaNome(PacchettoDiProdotti pacchetto, String nome) {
         pacchetto.setNome(nome);
     }
+
+    /*
     public void modificaDescrizione(PacchettoDiProdotti pacchetto, String descrizione){
         pacchetto.setDescrizione(descrizione);
     }
     public void modificaPrezzo(PacchettoDiProdotti pacchetto, double prezzo){
         pacchetto.setPrezzo(prezzo);
     }
+
+     */
 
     public Set<PacchettoDiProdotti> getPacchettiCreati() {
         return pacchettiCreati;

@@ -1,6 +1,7 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Eventi;
 
-import cs.unicam.filiera_agricola.Vendita.Indirizzo;
+import cs.unicam.filiera_agricola.Utenti.Ruolo;
+import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class Animatore extends UtenteRegistrato {
     }
 
     public Animatore(String username, String nome, String cognome, String email, String password,
-                     Luogo luogo, LocalDate dataDiNascita) {
-        super(username, nome, cognome, email, password, luogo, dataDiNascita, Ruolo.ANIMATORE);
+                     Luogo luogo) {
+        super(username, nome, cognome, email, password, luogo, Ruolo.ANIMATORE);
         this.eventiCreati = new ArrayList<>();
     }
 

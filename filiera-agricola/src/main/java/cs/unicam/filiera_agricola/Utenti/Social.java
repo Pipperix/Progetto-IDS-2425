@@ -1,4 +1,4 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Utenti;
 
 public enum Social {
     FACEBOOK,

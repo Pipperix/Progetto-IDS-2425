@@ -1,4 +1,4 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Utenti;
 
 public enum Ruolo {
     UTENTE,
@@ -7,5 +7,7 @@ public enum Ruolo {
     ANIMATORE,
     PRODUTTORE,
     DISTRIBUTORE,
-    TRASFORMATORE
+    TRASFORMATORE,
+    ACQUIRENTE,
+    VENDITORE
 }

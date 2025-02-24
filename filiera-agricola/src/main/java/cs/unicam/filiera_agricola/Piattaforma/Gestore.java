@@ -1,5 +1,7 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Piattaforma;
 
+import cs.unicam.filiera_agricola.Utenti.Ruolo;
+import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +13,8 @@ public class Gestore extends UtenteRegistrato {
     public Gestore() {}
 
     public Gestore(String username, String nome, String cognome, String email, String password,
-                   Luogo luogo, LocalDate dataDiNascita) {
-        super(username, nome, cognome, email, password, luogo, dataDiNascita, Ruolo.GESTORE);
+                   Luogo luogo) {
+        super(username, nome, cognome, email, password, luogo, Ruolo.GESTORE);
     }
 
     public ResponseEntity<String> rimuoviProdottiScaduti() {

@@ -1,8 +1,9 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Piattaforma;
 
 import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
-import jakarta.transaction.Transactional;
+import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
+import cs.unicam.filiera_agricola.Utenti.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class HandlerPiattaforma {
     public ResponseEntity<String> rimuoviProdottiScaduti() {
         List<Prodotto> prodottiScaduti = prodottiRepository.findByDataScadenzaBefore(LocalDate.now());
         if (!prodottiScaduti.isEmpty()) {
-            prodottiRepository.deleteByDataScadenzaBefore(LocalDate.now());
+            prodottiRepository.deleteAll(prodottiScaduti);
             return ResponseEntity.ok(prodottiScaduti.size() + " prodotti scaduti rimossi.");
         } else
             return ResponseEntity.badRequest().body("Nessun prodotto scaduto da rimuovere.");

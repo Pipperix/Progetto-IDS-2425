@@ -30,7 +30,7 @@ public class Prodotto {
     private Set<PacchettoDiProdotti> pacchetti = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "venditore_id", nullable = false)
+    @JoinColumn(name = "venditore_id", nullable = true)
     @JsonBackReference // Evita la serializzazione del venditore nel JSON del prodotto
     private Venditore venditore;
 
@@ -40,6 +40,7 @@ public class Prodotto {
         this.nome = nome;
         this.prezzo = prezzo;
         this.dataScadenza = dataScadenza;
+        //this.venditore = venditore;
     }
 
     public int getId() {

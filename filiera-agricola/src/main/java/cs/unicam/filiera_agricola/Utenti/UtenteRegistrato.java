@@ -1,11 +1,10 @@
-package cs.unicam.filiera_agricola;
+package cs.unicam.filiera_agricola.Utenti;
 
 import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -17,11 +16,12 @@ public class UtenteRegistrato implements Utente {
 
     @Column(unique = true) // username unico
     private String username;
+    @Column(insertable = false, updatable = false) // per evitare duplicati nella colonna
     private String nome;
     private String cognome;
     private String email;
     private String password;
-    private LocalDate dataDiNascita;
+    //private LocalDate dataDiNascita;
     @Embedded
     private Luogo luogo;
     @Column(nullable = false)
@@ -33,15 +33,14 @@ public class UtenteRegistrato implements Utente {
     public UtenteRegistrato() {}
 
     // Costruttore
-    public UtenteRegistrato(String username, String nome, String cognome, String email, String password, Luogo luogo,
-                            LocalDate dataDiNascita, Ruolo ruolo) {
+    public UtenteRegistrato(String username, String nome, String cognome, String email, String password,
+                            Luogo luogo, Ruolo ruolo) {
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
         this.luogo = luogo;
-        this.dataDiNascita = dataDiNascita;
         this.autorizzato = false; // non necessario
         this.ruolo = ruolo;
     }
@@ -98,7 +97,6 @@ public class UtenteRegistrato implements Utente {
     public String getCognome() { return cognome; }
     public String getEmail() { return email; }
     public Luogo getLuogo() { return luogo; }
-    public LocalDate getDataDiNascita() { return dataDiNascita; }
     public String getPassword() { return password; }
     public Ruolo getRuolo() { return ruolo; }
 
@@ -108,7 +106,6 @@ public class UtenteRegistrato implements Utente {
     public void setCognome(String cognome) { this.cognome = cognome; }
     public void setEmail(String email) { this.email = email; }
     public void setLuogo(Luogo indirizzo) { this.luogo = indirizzo; }
-    public void setDataDiNascita(LocalDate dataDiNascita) { this.dataDiNascita = dataDiNascita; }
     public void setPassword(String password) { this.password = password; }
     public void setRuolo(Ruolo ruolo) { this.ruolo = ruolo; }
 

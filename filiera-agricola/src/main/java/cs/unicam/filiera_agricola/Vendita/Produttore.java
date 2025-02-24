@@ -10,23 +10,29 @@ import jakarta.persistence.*;
 
 @Entity
 public class Produttore extends Venditore {
-    @OneToMany(mappedBy = "certificazione_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<Certificazione> certificazioniCreate = new HashSet<>();
+
     @Id
     private int id;
+
+    /*
+    @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Certificazione> certificazioniCreate = new HashSet<>();
+
+     */
 
     public Produttore() {
     }
 
-    public Produttore(String partitaIva) {
-        super(partitaIva);
+    public Produttore(String username, String nome, String cognome, String email, String password,
+                      Luogo luogo, String partitaIva) {
+        super(username, nome, cognome, email, password, luogo, partitaIva);
     }
 
     public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione) {
         if (prodotto.getDescrizione() != null) {
             prodotto.getDescrizione().aggiungiCertificazione(certificazione);
-            certificazioniCreate.add(certificazione);
+            //certificazioniCreate.add(certificazione);
         }
     }
 
@@ -44,7 +50,7 @@ public class Produttore extends Venditore {
     public void rimuoviCertificazione(Prodotto prodotto, Certificazione certificazione) {
         if (prodotto.getDescrizione() != null) {
             prodotto.getDescrizione().getCertificazioni().remove(certificazione);
-            certificazioniCreate.remove(certificazione);
+            //certificazioniCreate.remove(certificazione);
         }
     }
 

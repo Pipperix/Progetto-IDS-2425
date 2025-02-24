@@ -11,7 +11,7 @@ public class Azienda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String nome;
+    private String nomeAzienda;
     private String partitaIva;
 
     @OneToMany(mappedBy = "azienda", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -22,8 +22,8 @@ public class Azienda {
 
     public Azienda() {}
 
-    public Azienda(String nome, String partitaIva, Luogo luogo) {
-        this.nome = nome;
+    public Azienda(String nomeAzienda, String partitaIva, Luogo luogo) {
+        this.nomeAzienda = nomeAzienda;
         this.partitaIva = partitaIva;
         this.luogo = luogo;
     }
@@ -33,11 +33,11 @@ public class Azienda {
     }
 
     public String getNome() {
-        return nome;
+        return nomeAzienda;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String nomeAzienda) {
+        this.nomeAzienda = nomeAzienda;
     }
 
     public String getPartitaIva() {
@@ -54,12 +54,12 @@ public class Azienda {
 
     public void addVenditore(Venditore venditore) {
         venditori.add(venditore);
-        venditore.setAzienda(this);
+        //venditore.setAzienda(this);
     }
 
     public void removeVenditore(Venditore venditore) {
         venditori.remove(venditore);
-        venditore.setAzienda(null);
+        //venditore.setAzienda(null);
     }
 
     public Luogo getLuogo() {
