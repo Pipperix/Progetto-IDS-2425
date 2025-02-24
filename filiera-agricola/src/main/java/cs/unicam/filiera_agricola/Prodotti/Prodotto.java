@@ -1,5 +1,7 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -14,13 +16,16 @@ public class Prodotto {
     private String nome;
     private double prezzo;
     private LocalDate dataScadenza;
+
     @Column(nullable = false)
     private boolean approvato = false;
 
     @OneToOne(mappedBy = "prodotto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Descrizione descrizione;
 
     @ManyToMany(mappedBy = "prodotti")
+    @JsonBackReference
     private Set<PacchettoDiProdotti> pacchetti = new HashSet<>();
 
     public Prodotto() {}

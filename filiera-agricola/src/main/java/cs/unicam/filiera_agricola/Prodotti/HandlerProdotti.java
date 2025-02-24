@@ -15,6 +15,8 @@ public class HandlerProdotti {
     @Autowired
     private ProdottiRepository prodottiRepository;
     @Autowired
+    private PacchettiDiProdottiRepository pacchettiDiProdottiRepository;
+    @Autowired
     private DescrizioniRepository descrizioniRepository;
     @Autowired
     private CertificazioniRepository certificazioniRepository;
@@ -26,7 +28,6 @@ public class HandlerProdotti {
     public static HandlerProdotti getInstance() {
         return instance;
     }
-
 
     @PostConstruct
     public void init() {
@@ -70,6 +71,11 @@ public class HandlerProdotti {
         prodottiRepository.save(prodottoBuilder);
 
         // Pacchetto di prodotti
+        PacchettoDiProdotti pacchettoDiProdotti = new PacchettoDiProdotti("Pacchetto di pomodori");
+        pacchettoDiProdotti.aggiungiProdotto(prodotto);
+        pacchettoDiProdotti.aggiungiProdotto(prodottoTrasformato);
+
+        pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
     }
 
     // Ritorna tutti i prodotti
@@ -101,6 +107,18 @@ public class HandlerProdotti {
     @DeleteMapping(value = "/prodotti/{id}")
     public ResponseEntity<Object> deleteProdotto(@PathVariable int id) {
         if (prodottiRepository.existsById(id)) {
+            Prodotto prodotto = prodottiRepository.findById(id).get();
+            pacchettiDiProdottiRepository.findAll().forEach(
+                    pacchetto -> {
+                        if (pacchetto.getProdotti().contains(prodotto)) {
+                            pacchetto.rimuoviProdotto(prodotto);
+                            pacchettiDiProdottiRepository.save(pacchetto);
+                        }
+                        if (pacchetto.getProdotti().size() < 2) {
+                            pacchettiDiProdottiRepository.delete(pacchetto);
+                        }
+                    }
+            );
             prodottiRepository.deleteById(id);
             return ResponseEntity.ok("Prodotto eliminato");
         } else
@@ -116,6 +134,31 @@ public class HandlerProdotti {
             return ResponseEntity.ok("Prodotto aggiornato");
         } else
             return ResponseEntity.badRequest().body("Prodotto non esistente");
+    }
+
+    // Ritorna tutti i pacchetti di prodotti
+    @GetMapping(value = "/pacchetti")
+    public ResponseEntity<Object> getPacchetti() {
+        return ResponseEntity.ok(pacchettiDiProdottiRepository.findAll());
+    }
+
+    // Dettaglio pacchetto di prodotti
+    @GetMapping(value = "/pacchetti/{id}")
+    public ResponseEntity<Object> getPacchetto(@PathVariable int id) {
+        if (pacchettiDiProdottiRepository.existsById(id))
+            return ResponseEntity.ok(pacchettiDiProdottiRepository.findById(id).get());
+        else
+            return ResponseEntity.badRequest().body("Pacchetto non esistente");
+    }
+
+    // Elimina un pacchetto di prodotti
+    @DeleteMapping(value = "/pacchetti/{id}")
+    public ResponseEntity<Object> deletePacchetto(@PathVariable int id) {
+        if (pacchettiDiProdottiRepository.existsById(id)) {
+            pacchettiDiProdottiRepository.deleteById(id);
+            return ResponseEntity.ok("Pacchetto eliminato");
+        } else
+            return ResponseEntity.badRequest().body("Pacchetto non esistente");
     }
 
     // CURATORE

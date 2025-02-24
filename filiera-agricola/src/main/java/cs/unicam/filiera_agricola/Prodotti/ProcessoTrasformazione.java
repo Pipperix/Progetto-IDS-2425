@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class ProcessoTrasformazione {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "descrizione_id")
+    @JsonBackReference
     private Descrizione descrizione;
 
     public ProcessoTrasformazione() {}
@@ -31,6 +33,10 @@ public class ProcessoTrasformazione {
 
     public String getDettagliProcesso() {
         return dettagliProcesso;
+    }
+
+    public Descrizione getDescrizione() {
+        return descrizione;
     }
 
     public void setNome(String nome) {
