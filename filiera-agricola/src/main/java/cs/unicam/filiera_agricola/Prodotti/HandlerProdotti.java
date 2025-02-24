@@ -1,11 +1,13 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RestController
 public class HandlerProdotti {
@@ -18,6 +20,13 @@ public class HandlerProdotti {
     private CertificazioniRepository certificazioniRepository;
     @Autowired
     private ProcessiTrasformazioneRepository processiTrasformazioneRepository;
+
+    private static HandlerProdotti instance = new HandlerProdotti();
+
+    public static HandlerProdotti getInstance() {
+        return instance;
+    }
+
 
     @PostConstruct
     public void init() {
@@ -107,6 +116,25 @@ public class HandlerProdotti {
             return ResponseEntity.ok("Prodotto aggiornato");
         } else
             return ResponseEntity.badRequest().body("Prodotto non esistente");
+    }
+
+    // CURATORE
+    //@Transactional// garantisce che l'approvazione sia salvata correttamente
+    @PostMapping(value = "/prodotti/approva/{id}")
+    public ResponseEntity<String> approvaContenuto(@PathVariable int id) {
+        Optional<Prodotto> prodottoOpt = prodottiRepository.findById(id);
+        if (prodottoOpt.isPresent()) {
+            Prodotto prodotto = prodottoOpt.get();
+            if (!prodotto.isApprovato()) {
+                prodotto.setApprovato(true);
+                prodottiRepository.save(prodotto);
+                return ResponseEntity.ok("Prodotto approvato con successo.");
+            } else {
+                return ResponseEntity.badRequest().body("Prodotto già approvato.");
+            }
+        } else {
+            return ResponseEntity.badRequest().body("Prodotto non trovato.");
+        }
     }
 
 }

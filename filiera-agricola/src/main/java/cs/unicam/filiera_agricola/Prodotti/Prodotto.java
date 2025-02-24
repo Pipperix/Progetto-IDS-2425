@@ -14,6 +14,8 @@ public class Prodotto {
     private String nome;
     private double prezzo;
     private LocalDate dataScadenza;
+    @Column(nullable = false)
+    private boolean approvato = false;
 
     @OneToOne(mappedBy = "prodotto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Descrizione descrizione;
@@ -81,4 +83,13 @@ public class Prodotto {
     public void setProcessoTrasformazione(ProcessoTrasformazione processoTrasformazione) {
         this.descrizione.aggiungiProcessoTrasformazione(processoTrasformazione);
     }
+
+    public boolean isApprovato() {
+        return approvato;
+    }
+
+    public void setApprovato(boolean approvato) {
+        this.approvato = approvato;
+    }
+
 }
