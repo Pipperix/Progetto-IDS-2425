@@ -53,8 +53,8 @@ public class FilieraAgricolaFacade {
     }
 
     // HandlerOrdine
-    public void creaOrdine(int acquirenteId, Map<Prodotto, Integer> prodotti) {
-        handlerOrdine.creaOrdine(acquirenteId, prodotti);
+    public void creaOrdine(int acquirenteId, Map<Prodotto, Integer> prodotti, MetodoPagamento metodoPagamento) {
+        handlerOrdine.creaOrdine(acquirenteId, prodotti, metodoPagamento);
     }
     public List<Ordine> getOrdini(int acquirenteId) {
         return handlerOrdine.getOrdini(acquirenteId);

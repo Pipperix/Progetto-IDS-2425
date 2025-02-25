@@ -15,6 +15,9 @@ public class Ordine {
 
     private LocalDateTime istante;
 
+    @Enumerated(EnumType.STRING)
+    private MetodoPagamento metodoPagamento;
+
     @ElementCollection
     @CollectionTable(name = "ordine_prodotti_pacchetti", joinColumns = @JoinColumn(name = "ordine_id"))
     @MapKeyColumn(name = "tipo")
@@ -29,9 +32,10 @@ public class Ordine {
 
     public Ordine() {}
 
-    public Ordine(LocalDateTime istante, Acquirente acquirente) {
+    public Ordine(LocalDateTime istante, Acquirente acquirente, MetodoPagamento metodoPagamento) {
         this.istante = istante;
         this.acquirente = acquirente;
+        this.metodoPagamento = metodoPagamento;
     }
 
     public int getId() {
@@ -62,11 +66,4 @@ public class Ordine {
         this.acquirente = acquirente;
     }
 
-    /*
-    // Metodo di utilità per aggiungere un prodotto/pacchetto all'ordine
-    public void aggiungiProdottoPacchetto(Object prodotto, int quantita) {
-        this.prodotti.put(prodotto, quantita);
-    }
-
-     */
 }

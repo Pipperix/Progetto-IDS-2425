@@ -21,10 +21,12 @@ public class Distributore extends Venditore{
         super(username, nome, cognome, email, password, luogo, partitaIva);
     }
 
-    public void creaPacchettoDiProdotti(Set<Prodotto> prodotti){
+    public PacchettoDiProdotti creaPacchettoDiProdotti(Set<Prodotto> prodotti){
         PacchettoDiProdotti pacchetto = new PacchettoDiProdotti("nome");
         pacchettiCreati.add(pacchetto);
+        return pacchetto;
     }
+
     public void eliminaPacchetto(PacchettoDiProdotti pacchetto){
         pacchettiCreati.remove(pacchetto);
     }

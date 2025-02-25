@@ -3,32 +3,20 @@ import jakarta.persistence.*;
 
 @Embeddable
 public class Luogo{
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //private Long id;
     private String nome;
-    @Embedded
-    private Posizione posizione;
+    double latitudine;
+    double longitudine;
     @Embedded
     private Indirizzo indirizzo;
 
     public Luogo() {}
 
-    public Luogo(String nome, Posizione posizione, Indirizzo indirizzo) {
+    public Luogo(String nome, Indirizzo indirizzo, double latitudine, double longitudine) {
         this.nome = nome;
-        this.posizione = posizione;
         this.indirizzo = indirizzo;
+        this.latitudine = latitudine;
+        this.longitudine = longitudine;
     }
-/*
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
- */
 
     public String getNome() {
         return nome;
@@ -36,14 +24,6 @@ public class Luogo{
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Posizione getPosizione() {
-        return posizione;
-    }
-
-    public void setPosizione(Posizione posizione) {
-        this.posizione = posizione;
     }
 
     public Indirizzo getIndirizzo() {

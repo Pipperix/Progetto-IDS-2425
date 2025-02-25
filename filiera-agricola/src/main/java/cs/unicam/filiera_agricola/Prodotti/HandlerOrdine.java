@@ -28,13 +28,13 @@ public class HandlerOrdine {
     // Creazione di un ordine
     @Transactional
     @PostMapping("/creaOrdine")
-    public void creaOrdine(int acquirenteId, Map<Prodotto, Integer> prodotti) {
+    public void creaOrdine(int acquirenteId, Map<Prodotto, Integer> prodotti, MetodoPagamento metodoPagamento) {
         // Trova l'acquirente
         Acquirente acquirente = (Acquirente) utentiRepository.findById(acquirenteId)
                 .orElseThrow(() -> new RuntimeException("Acquirente non trovato"));
 
         // Crea l'ordine
-        Ordine ordine = new Ordine(LocalDateTime.now(), acquirente);
+        Ordine ordine = new Ordine(LocalDateTime.now(), acquirente, metodoPagamento);
         ordine.setProdotti(prodotti);
 
         // Salva l'ordine

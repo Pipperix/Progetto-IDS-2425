@@ -33,17 +33,6 @@ public class Venditore extends UtenteRegistrato {
         this.partitaIva = partitaIva;
     }
 
-    public String getPartitaIva() {
-        return partitaIva;
-    }
-    public void setPartitaIva(String partitaIva) {
-        this.partitaIva = partitaIva;
-    }
-
-    public Set<Prodotto> getProdottiCreati() {
-        return prodottiCreati;
-    }
-
     public void creaProdotto(String nome, double prezzo, LocalDate dataScadenza) {
         Prodotto nuovoProdotto = new Prodotto(nome, prezzo, dataScadenza);
         nuovoProdotto.setVenditore(this);  // Imposta il venditore del prodotto
@@ -90,5 +79,17 @@ public class Venditore extends UtenteRegistrato {
 
     public int getId() {
         return id;
+    }
+
+    public String getPartitaIva() {
+        return partitaIva;
+    }
+
+    public void setPartitaIva(String partitaIva) {
+        this.partitaIva = partitaIva;
+    }
+
+    public Set<Prodotto> getProdottiCreati() {
+        return prodottiCreati;
     }
 }

@@ -17,7 +17,7 @@ public class Trasformatore extends Venditore{
         super(username, nome, cognome, email, password, luogo, partitaIva);
     }
 
-    public void aggiungiProcessoTrasformato(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {
+    public void aggiungiProcessoTrasformazione(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {
         prodottoTrasformato.setProcessoTrasformazione(processoTrasformazione);
         ///prodottoTrasformato.getProcessiTrasformazione().add(processoTrasformazione);
     }
