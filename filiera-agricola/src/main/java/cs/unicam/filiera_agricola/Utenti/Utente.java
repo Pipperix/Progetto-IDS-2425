@@ -16,4 +16,6 @@ public interface Utente {
 
     // Signup
     boolean registrazione();
+
+    void visualizzaMappa();
 }

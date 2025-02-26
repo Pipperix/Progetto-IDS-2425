@@ -1,9 +1,13 @@
 package cs.unicam.filiera_agricola.Eventi;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class Evento {
@@ -13,7 +17,7 @@ public class Evento {
     private int id;
     private String nomeEvento;
     private String tipo;
-    private String descrizione;
+    private String descrizioneEvento;
     private LocalDateTime dataInizio;
     private LocalDateTime dataFine;
     @Embedded
@@ -21,19 +25,39 @@ public class Evento {
     private int capienzaPersone;
 
     @ManyToOne
-    @JoinColumn(name = "animatore_id", insertable=false, updatable=false)
+    @JoinColumn(name = "animatoreId", insertable=false, updatable=false)
     private Animatore animatore; // Riferimento all'animatore
+
+    @ManyToMany
+    @JoinTable(
+            name = "prenotazioni_evento",
+            joinColumns = @JoinColumn(name = "evento_id"),
+            inverseJoinColumns = @JoinColumn(name = "utente_id")
+    )
+    @JsonManagedReference
+    private Set<UtenteRegistrato> utentiPrenotati = new HashSet<>();
+
+    // se c'è disponibilità di posti all'evento, l'utente viene aggiunto alla lista degli utenti prenotati
+    public boolean prenotazione(UtenteRegistrato utente) {
+        if (capienzaPersone > 0) {
+            utentiPrenotati.add(utente);
+            utente.getEventiPrenotati().add(this); // assegnamento bidirezionale
+            capienzaPersone--;
+            return true;
+        }
+        return false;
+    }
 
     public Evento() {}
 
-    public Evento(String nomeEvento, String tipo, String descrizione, LocalDateTime dataInizio, LocalDateTime dataFine,
+    public Evento(String nomeEvento, String tipo, String descrizioneEvento, LocalDateTime dataInizio, LocalDateTime dataFine,
                   Luogo luogo, int capienzaPersone) {
-        this.nomeEvento = Objects.requireNonNull(nomeEvento, "Il nome non può essere nullo.");
+        this.nomeEvento = nomeEvento;
         this.tipo = tipo;
-        this.descrizione = descrizione;
-        this.dataInizio = Objects.requireNonNull(dataInizio, "La data d'inizio non può essere nullo.");
+        this.descrizioneEvento = descrizioneEvento;
+        this.dataInizio = dataInizio;
         this.dataFine = dataFine;
-        this.luogo = Objects.requireNonNull(luogo, "Il luogo non può essere nullo.");
+        this.luogo = luogo;
         this.capienzaPersone = capienzaPersone;
     }
 
@@ -62,8 +86,8 @@ public class Evento {
         return luogo;
     }
 
-    public String getDescrizione() {
-        return descrizione;
+    public String getDescrizioneEvento() {
+        return descrizioneEvento;
     }
 
     public int getCapienzaPersone() {
@@ -71,6 +95,10 @@ public class Evento {
     }
 
     public Animatore getAnimatore() { return animatore; }
+
+    public Set<UtenteRegistrato> getUtentiPrenotati() {
+        return utentiPrenotati;
+    }
 
     // Setter
     public void setNomeEvento(String nomeEvento) {
@@ -93,8 +121,8 @@ public class Evento {
         this.luogo = Objects.requireNonNull(luogo, "Il luogo non può essere nullo.");
     }
 
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
+    public void setDescrizioneEvento(String descrizioneEvento) {
+        this.descrizioneEvento = descrizioneEvento;
     }
 
     public void setCapienzaPersone(int capienzaPersone) {

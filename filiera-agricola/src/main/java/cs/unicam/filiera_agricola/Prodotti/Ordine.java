@@ -2,10 +2,11 @@ package cs.unicam.filiera_agricola.Prodotti;
 
 import cs.unicam.filiera_agricola.Vendita.Acquirente;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
 public class Ordine {
@@ -26,7 +27,7 @@ public class Ordine {
     private Map<Prodotto, Integer> prodotti = new HashMap<>();
 
     @ManyToOne
-    @JoinColumn(name = "acquirente_id", nullable = false)
+    @JoinColumn(name = "acquirente_id")
     private Acquirente acquirente;
 
 

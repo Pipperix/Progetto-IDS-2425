@@ -12,17 +12,17 @@ public class Gestore extends UtenteRegistrato {
 
     public Gestore() {}
 
-    public Gestore(String username, String nome, String cognome, String email, String password,
+    public Gestore(String username, String nomeUtente, String cognome, String email, String password,
                    Luogo luogo) {
-        super(username, nome, cognome, email, password, luogo, Ruolo.GESTORE);
+        super(username, nomeUtente, cognome, email, password, luogo, Ruolo.GESTORE);
     }
 
     public ResponseEntity<String> rimuoviProdottiScaduti() {
         return HandlerPiattaforma.getInstance().rimuoviProdottiScaduti();
     }
 
-    public ResponseEntity<String> autorizzaAccount(int id) {
-        return HandlerPiattaforma.getInstance().autorizzaAccount(id);
+    public ResponseEntity<String> autorizzaAccount(int utenteId) {
+        return HandlerPiattaforma.getInstance().autorizzaAccount(utenteId);
     }
 
 }

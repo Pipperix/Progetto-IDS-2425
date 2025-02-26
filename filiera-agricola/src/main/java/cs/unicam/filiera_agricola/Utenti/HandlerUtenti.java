@@ -4,35 +4,30 @@ import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Vendita.Indirizzo;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
-import cs.unicam.filiera_agricola.Vendita.Posizione;
-import cs.unicam.filiera_agricola.Vendita.Venditore;
 import jakarta.annotation.PostConstruct;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
     @RestController
     @RequestMapping("/utenti")
-    //@Service
     public class HandlerUtenti {
 
         private static HandlerUtenti instance = new HandlerUtenti();
         @Autowired
-        private UtenteRepository utenteRepository;
+        private UtentiRepository utentiRepository;
         @Autowired
-        private ProdottiRepository prodottoRepository;
+        private ProdottiRepository prodottiRepository;
 
         public HandlerUtenti() {}
 
         @Autowired
-        public HandlerUtenti(UtenteRepository utenteRepository) {
-            this.utenteRepository = utenteRepository;
+        public HandlerUtenti(UtentiRepository utentiRepository, ProdottiRepository prodottiRepository) {
+            this.utentiRepository = utentiRepository;
+            this.prodottiRepository = prodottiRepository;
         }
 
         public static HandlerUtenti getInstance() {
@@ -41,7 +36,7 @@ import java.util.Optional;
 
         @GetMapping(value = "/tutti")
         public ResponseEntity<List<UtenteRegistrato>> getTuttiUtenti() {
-            List<UtenteRegistrato> utenti = utenteRepository.findAll();
+            List<UtenteRegistrato> utenti = utentiRepository.findAll();
             return ResponseEntity.ok(utenti);
         }
 
@@ -49,7 +44,7 @@ import java.util.Optional;
         public ResponseEntity<Object> registrazione(@RequestBody UtenteRegistrato nuovoUtente) {
         //public ResponseEntity<Object> registrazione(UtenteRegistrato nuovoUtente) {
             // Controllo se username è già in uso
-            if (utenteRepository.findByUsername(nuovoUtente.getUsername()).isPresent()) {
+            if (utentiRepository.findByUsername(nuovoUtente.getUsername()).isPresent()) {
                 return ResponseEntity.badRequest().body("Utente già registrato. Esegui l'autenticazione");
             }
             // Impostare autorizzato a false automaticamente
@@ -58,10 +53,10 @@ import java.util.Optional;
             // Se il ruolo non è specificato, assegna il valore predefinito UTENTE
             if (nuovoUtente.getRuolo() == null) {
                 nuovoUtente.setRuolo(Ruolo.UTENTE);
-                utenteRepository.save(nuovoUtente);
+                utentiRepository.save(nuovoUtente);
             }
                 // Salvare l'utente nel database
-                utenteRepository.save(nuovoUtente);
+                utentiRepository.save(nuovoUtente);
                 return ResponseEntity.ok("Registrazione completata come " + nuovoUtente.getRuolo() + ". " +
                         "Attendi l'approvazione da parte di un gestore.");
         }
@@ -69,7 +64,7 @@ import java.util.Optional;
         @PostMapping("/login")
         public ResponseEntity<Object> autenticazione(@RequestParam String username, @RequestParam String password) {
         //public ResponseEntity<Object> autenticazione(String username, String password) {
-                Optional<UtenteRegistrato> user = utenteRepository.findByUsername(username);
+                Optional<UtenteRegistrato> user = utentiRepository.findByUsername(username);
             if (user.isPresent() && user.get().getPassword().equals(password)) {
                 return ResponseEntity.ok("Login effettuato");
             }
@@ -79,7 +74,7 @@ import java.util.Optional;
         @PostMapping("/logout")
         public ResponseEntity<Object> disconnessione(@RequestParam String username) {
         //public ResponseEntity<Object> disconnessione(String username) {
-                Optional<UtenteRegistrato> user = utenteRepository.findByUsername(username);
+                Optional<UtenteRegistrato> user = utentiRepository.findByUsername(username);
             if (user.isPresent()) {
                 return ResponseEntity.ok("Logout effettuato");
             }
@@ -90,7 +85,7 @@ import java.util.Optional;
         public ResponseEntity<String> modificaDatiUtente(@PathVariable int id, @RequestBody UtenteRegistrato nuovoUtente) {
         //public ResponseEntity<String> modificaDatiUtente(int id, UtenteRegistrato nuovoUtente) {
             // Recupera l'utente dal database
-            Optional<UtenteRegistrato> utenteOpt = utenteRepository.findById(id);
+            Optional<UtenteRegistrato> utenteOpt = utentiRepository.findById(id);
 
             if (utenteOpt.isPresent()) {
                 UtenteRegistrato utente = utenteOpt.get();
@@ -99,8 +94,8 @@ import java.util.Optional;
                 if (nuovoUtente.getUsername() != null) {
                     utente.setUsername(nuovoUtente.getUsername());  // Modifica il nome
                 }
-                if (nuovoUtente.getNome() != null) {
-                    utente.setNome(nuovoUtente.getNome());  // Modifica il nome
+                if (nuovoUtente.getNomeUtente() != null) {
+                    utente.setNomeUtente(nuovoUtente.getNomeUtente());  // Modifica il nome
                 }
                 if (nuovoUtente.getCognome() != null) {
                     utente.setCognome(nuovoUtente.getCognome());  // Modifica il nome
@@ -115,7 +110,7 @@ import java.util.Optional;
                     utente.setLuogo(nuovoUtente.getLuogo());  // Modifica l'indirizzo
                 }
                 // Salva l'utente aggiornato
-                utenteRepository.save(utente);
+                utentiRepository.save(utente);
                 return ResponseEntity.ok("Dati utente aggiornati con successo.");
             } else {
                 return ResponseEntity.badRequest().body("Utente non trovato.");
@@ -126,11 +121,13 @@ import java.util.Optional;
         public ResponseEntity<List<Luogo>> visualizzaMappa() {
             List<Luogo> mappa = new ArrayList<>();
             // Recupera gli utenti che sono venditori
-            List<UtenteRegistrato> utenti = utenteRepository.findAll();
+            List<UtenteRegistrato> utenti = utentiRepository.findAll();
             for (UtenteRegistrato utente : utenti) {
-                if (utente instanceof Venditore venditore) {
+                //if (utente instanceof Venditore venditore) {
+                if (utente.getRuolo() == Ruolo.PRODUTTORE || utente.getRuolo() == Ruolo.TRASFORMATORE ||
+                        utente.getRuolo() == Ruolo.DISTRIBUTORE || utente.getRuolo() == Ruolo.VENDITORE) {
                     // Aggiungi il luogo del venditore
-                    mappa.add(venditore.getLuogo());
+                    mappa.add(utente.getLuogo());
                 }
             }
             return ResponseEntity.ok(mappa);
@@ -139,43 +136,42 @@ import java.util.Optional;
         @PostMapping("/condividi")
         public ResponseEntity<String> condivisioneSuSocial(@RequestParam int prodottoId, @RequestParam Social social,
                                                            @RequestParam String username, @RequestParam String password) {
+
             // Recupera il prodotto dal database
-            Optional<Prodotto> prodottoOpt = prodottoRepository.findById(prodottoId);
+            Optional<Prodotto> prodottoOpt = prodottiRepository.findById(prodottoId);
             if (prodottoOpt.isEmpty()) {
                 return ResponseEntity.badRequest().body("Prodotto non trovato.");
             }
 
             // Recupera l'utente registrato dal database
-            UtenteRegistrato utente = utenteRepository.findByUsername(username).orElseThrow();
-            if (!utente.registrazione()) {
+            Optional<UtenteRegistrato> utente = utentiRepository.findByUsername(username);
+            //if (utente.isEmpty() || !utente.get().getPassword().equals(password)) {
+            if (utente.isEmpty()) {
                 return ResponseEntity.badRequest().body("Credenziali errate o utente non registrato");
             }
 
             // Restituisce la risposta di successo
-            return ResponseEntity.ok("Contenuto condiviso con successo su " + social.name());
+            return ResponseEntity.ok("Contenuto condiviso con successo su " + social);
         }
 
 
         @PostConstruct
         public void init() {
-            if (utenteRepository.count() == 0) { // Evita duplicati
+            if (utentiRepository.count() == 0) { // Evita duplicati
                 Indirizzo indirizzo1 = new Indirizzo("Via Napoli", "3", "34677", "Napoli");
                 Indirizzo indirizzo2 = new Indirizzo("Via Torino", "4", "46976", "Torino");
 
-                Posizione posizione1 = new Posizione(43.717899, 10.408900);
-                Posizione posizione2 = new Posizione(43.717899, 10.408900);
-
                 UtenteRegistrato utente1 = new UtenteRegistrato("chiamer", "Chiara", "Medeiros",
-                        "chiara.medei@libero.it", "passwordkia", new Luogo("Cantiani SRL",
-                        posizione1, indirizzo1), Ruolo.PRODUTTORE);
+                        "chiara.medei@libero.it", "passwordkia", new Luogo("Cantiani SRL", indirizzo1,
+                        43.717899, 10.408900), Ruolo.PRODUTTORE);
                         //LocalDate.of(2003, 5, 6)
+                utentiRepository.save(utente1);
 
                 UtenteRegistrato utente2 = new UtenteRegistrato("pipperix", "Fabio", "Fazio",
-                        "fabietto68@libero.it", "thegreaterone", new Luogo("Gazzettino s.p.a.",
-                        posizione2, indirizzo2), Ruolo.TRASFORMATORE);
+                        "fabietto68@libero.it", "thegreaterone", new Luogo("Gazzettino s.p.a.", indirizzo2,
+                        67.568997, 31.354687), Ruolo.TRASFORMATORE);
 
-                utenteRepository.save(utente1);
-                utenteRepository.save(utente2);
+                utentiRepository.save(utente2);
             }
         }
 

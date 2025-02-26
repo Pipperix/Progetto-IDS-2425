@@ -7,15 +7,15 @@ public class Indirizzo{
     private String via;
     private String civico;
     private String cap;
-    private String città;
+    private String citta;
 
     public Indirizzo() {}
 
-    public Indirizzo(String via, String civico, String cap, String città){
+    public Indirizzo(String via, String civico, String cap, String citta){
         this.via = via;
         this.civico = civico;
         this.cap = cap;
-        this.città = città;
+        this.citta = citta;
     }
 
     public String getVia() {
@@ -42,11 +42,11 @@ public class Indirizzo{
         this.cap = cap;
     }
 
-    public String getCittà() {
-        return città;
+    public String getCitta() {
+        return citta;
     }
 
-    public void setCittà(String città) {
-        this.città = città;
+    public void setCitta(String citta) {
+        this.citta = citta;
     }
 }

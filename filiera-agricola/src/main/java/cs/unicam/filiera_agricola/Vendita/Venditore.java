@@ -27,9 +27,9 @@ public class Venditore extends UtenteRegistrato {
 
     public Venditore() {}
 
-    public Venditore(String username, String nome, String cognome, String email, String password,
+    public Venditore(String username, String nomeUtente, String cognome, String email, String password,
                      Luogo luogo, String partitaIva) {
-        super(username, nome, cognome, email, password, luogo, Ruolo.VENDITORE);
+        super(username, nomeUtente, cognome, email, password, luogo, Ruolo.VENDITORE);
         this.partitaIva = partitaIva;
     }
 

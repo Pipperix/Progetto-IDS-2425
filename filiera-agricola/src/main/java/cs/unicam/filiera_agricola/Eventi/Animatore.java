@@ -22,9 +22,9 @@ public class Animatore extends UtenteRegistrato {
         super(); // Necessario per JPA
     }
 
-    public Animatore(String username, String nome, String cognome, String email, String password,
+    public Animatore(String username, String nomeUtente, String cognome, String email, String password,
                      Luogo luogo) {
-        super(username, nome, cognome, email, password, luogo, Ruolo.ANIMATORE);
+        super(username, nomeUtente, cognome, email, password, luogo, Ruolo.ANIMATORE);
         this.eventiCreati = new ArrayList<>();
     }
 

@@ -13,8 +13,8 @@ public class Trasformatore extends Venditore{
 
     public Trasformatore() {}
 
-    public Trasformatore(String username, String nome, String cognome, String email, String password, Luogo luogo, String partitaIva) {
-        super(username, nome, cognome, email, password, luogo, partitaIva);
+    public Trasformatore(String username, String nomeUtente, String cognome, String email, String password, Luogo luogo, String partitaIva) {
+        super(username, nomeUtente, cognome, email, password, luogo, partitaIva);
     }
 
     public void aggiungiProcessoTrasformazione(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {

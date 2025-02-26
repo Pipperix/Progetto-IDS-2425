@@ -1,16 +1,14 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import cs.unicam.filiera_agricola.Utenti.UtenteRepository;
+import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
 import cs.unicam.filiera_agricola.Vendita.Acquirente;
-import cs.unicam.filiera_agricola.Vendita.Venditore;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +18,16 @@ public class HandlerOrdine {
     @Autowired
     private OrdiniRepository ordiniRepository;
 
-    private UtenteRepository utentiRepository;
+    private UtentiRepository utentiRepository;
 
 //    @Autowired
 //    private AcquirentiRepository acquirentiRepository;
+
+    private static HandlerOrdine instance = new HandlerOrdine();
+
+    public static HandlerOrdine getInstance() {
+        return instance;
+    }
 
     // Creazione di un ordine
     @Transactional

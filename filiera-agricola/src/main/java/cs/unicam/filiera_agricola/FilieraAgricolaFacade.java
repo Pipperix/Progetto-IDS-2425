@@ -7,14 +7,10 @@ import cs.unicam.filiera_agricola.Piattaforma.HandlerPiattaforma;
 import cs.unicam.filiera_agricola.Utenti.HandlerUtenti;
 import cs.unicam.filiera_agricola.Utenti.Social;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
-import cs.unicam.filiera_agricola.Vendita.Luogo;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.stereotype.Component;
 import java.util.Map;
 
-//@RestController
+@Component
 public class FilieraAgricolaFacade {
 
     private final HandlerEventi handlerEventi;
@@ -23,6 +19,13 @@ public class FilieraAgricolaFacade {
     private final HandlerPiattaforma handlerPiattaforma;
     //private final HandlerPagamenti handlerPagamenti;
     private final HandlerUtenti handlerUtenti;
+
+    private static FilieraAgricolaFacade instance = new FilieraAgricolaFacade(HandlerEventi.getInstance(), HandlerOrdine.getInstance(),
+            HandlerProdotti.getInstance(), HandlerPiattaforma.getInstance(), HandlerUtenti.getInstance());
+
+    public static FilieraAgricolaFacade getInstance() {
+        return instance;
+    }
 
     public FilieraAgricolaFacade (HandlerEventi handlerEventi, HandlerOrdine handlerOrdine,
                                   HandlerProdotti handlerProdotti, HandlerPiattaforma handlerPiattaforma,
@@ -36,111 +39,117 @@ public class FilieraAgricolaFacade {
     }
 
     // HandlerEventi
-    public ResponseEntity<String> creaEvento(Evento evento) {
-        return handlerEventi.creaEvento(evento);
+    public void creaEvento(Evento evento) {
+        handlerEventi.creaEvento(evento);
     }
-    public ResponseEntity<List<Evento>> getTuttiEventi() {
-        return handlerEventi.getTuttiEventi();
+    public void getTuttiEventi() {
+        handlerEventi.getTuttiEventi();
     }
-    public ResponseEntity<Object> getEventoById(int id) {
-        return handlerEventi.getEventoById(id);
+    public void getEventoById(int id) {
+        handlerEventi.getEventoById(id);
     }
-    public ResponseEntity<String> modificaEvento(int id, Evento eventoModificato) {
-        return handlerEventi.modificaEvento(id, eventoModificato);
+    public void modificaEvento(int eventoId, Evento eventoModificato) {
+        handlerEventi.modificaEvento(eventoId, eventoModificato);
     }
-    public ResponseEntity<String> eliminaEvento(int id) {
-        return handlerEventi.eliminaEvento(id);
+    public void eliminaEvento(int eventoId) {
+        handlerEventi.eliminaEvento(eventoId);
+    }
+    public void prenotaEvento(int eventoId, String username) {
+        handlerEventi.prenotaEvento(eventoId, username);
+    }
+    public void getPrenotati(int id) {
+        handlerEventi.getPrenotati(id);
     }
 
     // HandlerOrdine
     public void creaOrdine(int acquirenteId, Map<Prodotto, Integer> prodotti, MetodoPagamento metodoPagamento) {
         handlerOrdine.creaOrdine(acquirenteId, prodotti, metodoPagamento);
     }
-    public List<Ordine> getOrdini(int acquirenteId) {
-        return handlerOrdine.getOrdini(acquirenteId);
+    public void getOrdini(int acquirenteId) {
+        handlerOrdine.getOrdini(acquirenteId);
     }
-    public String notificaOrdine(int ordineId) {
-        return handlerOrdine.notificaOrdine(ordineId);
+    public void notificaOrdine(int ordineId) {
+        handlerOrdine.notificaOrdine(ordineId);
     }
 
     // HandlerProdotti
-    public ResponseEntity<Object> getProdotti() {
-        return handlerProdotti.getProdotti();
+    public void getProdotti() {
+        handlerProdotti.getProdotti();
     }
-    public ResponseEntity<Object> getProdotto(int id) {
-        return handlerProdotti.getProdotto(id);
+    public void getProdotto(int id) {
+        handlerProdotti.getProdotto(id);
     }
-    public ResponseEntity<Object> addProdotto(Prodotto prodotto) {
-        return handlerProdotti.addProdotto(prodotto);
+    public void addProdotto(Prodotto prodotto) {
+        handlerProdotti.addProdotto(prodotto);
     }
-    public ResponseEntity<Object> deleteProdotto(int id) {
-        return handlerProdotti.deleteProdotto(id);
+    public void deleteProdotto(int id) {
+        handlerProdotti.deleteProdotto(id);
     }
-    public ResponseEntity<Object> updateProdotto(int id, Prodotto prodotto) {
-        return handlerProdotti.updateProdotto(id, prodotto);
+    public void updateProdotto(int id, Prodotto prodotto) {
+        handlerProdotti.updateProdotto(id, prodotto);
     }
-    public ResponseEntity<Object> getPacchetti() {
-        return handlerProdotti.getPacchetti();
+    public void getPacchetti() {
+        handlerProdotti.getPacchetti();
     }
-    public ResponseEntity<Object> getPacchetto(int id) {
-        return handlerProdotti.getPacchetto(id);
+    public void getPacchetto(int id) {
+        handlerProdotti.getPacchetto(id);
     }
-    public ResponseEntity<Object> addPacchetto(PacchettoDiProdotti pacchettoDiProdotti) {
-        return handlerProdotti.addPacchetto(pacchettoDiProdotti);
+    public void addPacchetto(PacchettoDiProdotti pacchettoDiProdotti) {
+        handlerProdotti.addPacchetto(pacchettoDiProdotti);
     }
-    public ResponseEntity<Object> deletePacchetto(int id) {
-        return handlerProdotti.deletePacchetto(id);
+    public void deletePacchetto(int id) {
+        handlerProdotti.deletePacchetto(id);
     }
-    public ResponseEntity<Object> updatePacchetto(int id, PacchettoDiProdotti pacchettoDiProdotti) {
-        return handlerProdotti.updatePacchetto(id, pacchettoDiProdotti);
+    public void updatePacchetto(int id, PacchettoDiProdotti pacchettoDiProdotti) {
+        handlerProdotti.updatePacchetto(id, pacchettoDiProdotti);
     }
-    public ResponseEntity<String> approvaContenuto(int id) {
-        return handlerProdotti.approvaContenuto(id);
+    public void approvaContenuto(int id) {
+        handlerProdotti.approvaContenuto(id);
     }
-    public ResponseEntity<String> modificaQuantita(int id, int quantita) {
-        return handlerProdotti.modificaQuantita(id, quantita);
+    public void modificaQuantita(int id, int quantita) {
+        handlerProdotti.modificaQuantita(id, quantita);
     }
 
     // HandlerPiattaforma
-    public ResponseEntity<String> rimuoviProdottiScaduti() {
-        return handlerPiattaforma.rimuoviProdottiScaduti();
+    public void rimuoviProdottiScaduti() {
+        handlerPiattaforma.rimuoviProdottiScaduti();
     }
-    public ResponseEntity<String> autorizzaAccount(int id) {
-        return handlerPiattaforma.autorizzaAccount(id);
+    public void autorizzaAccount(int id) {
+        handlerPiattaforma.autorizzaAccount(id);
     }
 
     // HandlerUtenti
     //@GetMapping(value = "/utenti/tutti")
-    public ResponseEntity<List<UtenteRegistrato>> getTuttiUtenti() {
-        return handlerUtenti.getTuttiUtenti();
+    public void getTuttiUtenti() {
+        handlerUtenti.getTuttiUtenti();
     }
     //@PostMapping(value = "/utenti/registrazione")
-    public ResponseEntity<Object> registrazione(UtenteRegistrato nuovoUtente) {
-        return handlerUtenti.registrazione(nuovoUtente);
+    public void registrazione(UtenteRegistrato nuovoUtente) {
+        handlerUtenti.registrazione(nuovoUtente);
     }
     //@PostMapping("/utenti/login")
     //public ResponseEntity<Object> autenticazione(@RequestParam String username, @RequestParam String password) {
-    public ResponseEntity<Object> autenticazione(String username, String password) {
-            return handlerUtenti.autenticazione(username, password);
+    public void autenticazione(String username, String password) {
+        handlerUtenti.autenticazione(username, password);
     }
     //@PostMapping("/utenti/logout")
     //public ResponseEntity<Object> disconnessione(@RequestParam String username) {
-    public ResponseEntity<Object> disconnessione(String username) {
-        return handlerUtenti.disconnessione(username);
+    public void disconnessione(String username) {
+        handlerUtenti.disconnessione(username);
     }
     //@PutMapping("/utenti/modifica-dati/{id}")
     //public ResponseEntity<String> modificaDatiUtente(@PathVariable int id, @RequestBody UtenteRegistrato nuovoUtente) {
-    public ResponseEntity<String> modificaDatiUtente(int id, UtenteRegistrato nuovoUtente) {
-        return handlerUtenti.modificaDatiUtente(id, nuovoUtente);
+    public void modificaDatiUtente(int id, UtenteRegistrato nuovoUtente) {
+        handlerUtenti.modificaDatiUtente(id, nuovoUtente);
     }
     //@GetMapping("/utenti/mappa")
-    public ResponseEntity<List<Luogo>> visualizzaMappa() {
-        return handlerUtenti.visualizzaMappa();
+    public void visualizzaMappa() {
+        handlerUtenti.visualizzaMappa();
     }
     //@PostMapping("/utenti/condividi")
     //public ResponseEntity<String> condivisioneSuSocial(@RequestParam int prodottoId, @RequestParam Social social, @RequestParam String username, @RequestParam String password) {
-    public ResponseEntity<String> condivisioneSuSocial(int prodottoId, Social social, String username, String password) {
-        return handlerUtenti.condivisioneSuSocial(prodottoId, social, username, password);
+    public void condivisioneSuSocial(int prodottoId, Social social, String username, String password) {
+        handlerUtenti.condivisioneSuSocial(prodottoId, social, username, password);
     }
 
 

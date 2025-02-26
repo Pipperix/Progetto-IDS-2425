@@ -24,9 +24,9 @@ public class Produttore extends Venditore {
     public Produttore() {
     }
 
-    public Produttore(String username, String nome, String cognome, String email, String password,
+    public Produttore(String username, String nomeUtente, String cognome, String email, String password,
                       Luogo luogo, String partitaIva) {
-        super(username, nome, cognome, email, password, luogo, partitaIva);
+        super(username, nomeUtente, cognome, email, password, luogo, partitaIva);
     }
 
     public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione) {

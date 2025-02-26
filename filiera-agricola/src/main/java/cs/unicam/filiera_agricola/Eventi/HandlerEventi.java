@@ -1,8 +1,9 @@
 package cs.unicam.filiera_agricola.Eventi;
 
+import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
+import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
 import cs.unicam.filiera_agricola.Vendita.Indirizzo;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
-import cs.unicam.filiera_agricola.Vendita.Posizione;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/eventi")
@@ -19,6 +21,8 @@ public class HandlerEventi {
     private static HandlerEventi instance = new HandlerEventi();
     @Autowired
     private EventoRepository eventoRepository;
+    @Autowired
+    private UtentiRepository utentiRepository;
 
     public HandlerEventi() {}
 
@@ -64,8 +68,8 @@ public class HandlerEventi {
             if (eventoModificato.getTipo() != null) {
                 evento.setTipo(eventoModificato.getTipo());
             }
-            if (eventoModificato.getDescrizione() != null) {
-                evento.setDescrizione(eventoModificato.getDescrizione());
+            if (eventoModificato.getDescrizioneEvento() != null) {
+                evento.setDescrizioneEvento(eventoModificato.getDescrizioneEvento());
             }
             if (eventoModificato.getDataInizio() != null) {
                 evento.setDataInizio(eventoModificato.getDataInizio());
@@ -79,7 +83,6 @@ public class HandlerEventi {
             if (eventoModificato.getCapienzaPersone() > 0) {
                 evento.setCapienzaPersone(eventoModificato.getCapienzaPersone());
             }
-
             eventoRepository.save(evento);
             return ResponseEntity.ok("Evento modificato con successo.");
         } else {
@@ -97,22 +100,58 @@ public class HandlerEventi {
             return ResponseEntity.badRequest().body("Evento non esistente");
     }
 
+    @PostMapping("/prenota")
+    public ResponseEntity<String> prenotaEvento(@RequestParam int eventoId, @RequestParam String username) {
+        Optional<Evento> eventoOpt = eventoRepository.findById(eventoId);
+        Optional<UtenteRegistrato> utenteOpt = utentiRepository.findByUsername(username);
+
+        if (eventoOpt.isEmpty() || utenteOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Evento o utente non trovato.");
+        }
+
+        Evento evento = eventoOpt.get();
+        UtenteRegistrato utente = utenteOpt.get();
+
+        if (evento.prenotazione(utente)) {
+            eventoRepository.save(evento);  // Salva l'evento aggiornato
+            return ResponseEntity.ok("Prenotazione avvenuta con successo.");
+        } else {
+            return ResponseEntity.badRequest().body("Posti esauriti.");
+        }
+    }
+
+    /*
+    @GetMapping("/{eventoId}/prenotati")
+    public ResponseEntity<Set<UtenteRegistrato>> getPrenotati(@PathVariable int eventoId) {
+        Optional<Evento> eventoOpt = eventoRepository.findById(eventoId);
+        if (eventoOpt.isPresent()) {
+            return ResponseEntity.ok(eventoOpt.get().getUtentiPrenotati());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+     */
+    @GetMapping("/{eventoId}/prenotati")
+    public ResponseEntity<Set<UtenteRegistrato>> getPrenotati(@PathVariable int eventoId) {
+        return ResponseEntity.ok(eventoRepository.findById(eventoId).get().getUtentiPrenotati());
+    }
+
     @PostConstruct
     public void init() {
         if (eventoRepository.count() == 0) { // Evita duplicati
             Indirizzo indirizzo1 = new Indirizzo("Via Roma", "1", "60022", "Roma" );
             Indirizzo indirizzo2 = new Indirizzo("Via Firenze", "2", "50023", "Firenze");
 
-            Posizione posizione1 = new Posizione(43.717899, 10.408900);
-            Posizione posizione2 = new Posizione(43.717899, 10.408900);
+            //Posizione posizione1 = new Posizione(43.717899, 10.408900);
+            //Posizione posizione2 = new Posizione(43.717899, 10.408900);
 
             Evento evento1 = new Evento("Fiera Bio", "Agricoltura", "Esposizione di prodotti biologici",
                     LocalDateTime.now().plusDays(10), LocalDateTime.now().plusDays(11),
-                    new Luogo("Piazza Centrale", posizione1, indirizzo1), 100);
+                    new Luogo("Piazza Centrale", indirizzo1, 43.717899, 10.408900), 100);
 
             Evento evento2 = new Evento("Degustazione Vini", "Enologia", "Evento per amanti del vino",
                     LocalDateTime.now().plusDays(5), LocalDateTime.now().plusDays(6),
-                    new Luogo("Cantina Rossi", posizione2, indirizzo2), 50);
+                    new Luogo("Cantina Rossi", indirizzo2, 43.717899, 10.408900), 50);
 
             eventoRepository.save(evento1);
             eventoRepository.save(evento2);

@@ -3,10 +3,7 @@ package cs.unicam.filiera_agricola.Prodotti;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,14 +18,17 @@ public class Descrizione {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
+    //@JsonBackReference(value = "prodotto-descrizione")
     @JsonBackReference
     private Prodotto prodotto;
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    //@JsonManagedReference(value = "descrizione-certificazioni")
     @JsonManagedReference
     private Set<Certificazione> certificazioni = new HashSet<>();
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    //@JsonManagedReference(value = "descrizione-processi")
     @JsonManagedReference
     private Set<ProcessoTrasformazione> processiTrasformazione = new HashSet<>();
 
@@ -38,6 +38,14 @@ public class Descrizione {
         this.descrizione = descrizione;
         this.quantita = quantita;
         this.approvato = approvato;
+    }
+
+    public Descrizione(String descrizione, int quantita, Set<Certificazione> certificazioni,
+                       Set<ProcessoTrasformazione> processitrasformazione) {
+        this.descrizione = descrizione;
+        this.quantita = quantita;
+        this.certificazioni = certificazioni;
+        this.processiTrasformazione = processitrasformazione;
     }
 
     public String getDescrizione() {

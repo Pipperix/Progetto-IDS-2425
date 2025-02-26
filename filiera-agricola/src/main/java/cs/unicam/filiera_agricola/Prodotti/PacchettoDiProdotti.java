@@ -33,6 +33,17 @@ public class PacchettoDiProdotti {
         this.nome = nome;
     }
 
+    public PacchettoDiProdotti(String nome, Set<Prodotto> prodotti, Distributore distributore) {
+        this.nome = nome;
+        this.prodotti = prodotti;
+        this.distributore = distributore;
+    }
+
+    public PacchettoDiProdotti(String nome, Set<Prodotto> prodotti) {
+        this.nome = nome;
+        this.prodotti = prodotti;
+    }
+
     public int getId() {
         return id;
     }

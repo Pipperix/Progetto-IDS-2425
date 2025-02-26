@@ -17,8 +17,8 @@ public class Distributore extends Venditore{
 
     public Distributore() {}
 
-    public Distributore(String username, String nome, String cognome, String email, String password, Luogo luogo, String partitaIva) {
-        super(username, nome, cognome, email, password, luogo, partitaIva);
+    public Distributore(String username, String nomeUtente, String cognome, String email, String password, Luogo luogo, String partitaIva) {
+        super(username, nomeUtente, cognome, email, password, luogo, partitaIva);
     }
 
     public PacchettoDiProdotti creaPacchettoDiProdotti(Set<Prodotto> prodotti){
@@ -30,6 +30,7 @@ public class Distributore extends Venditore{
     public void eliminaPacchetto(PacchettoDiProdotti pacchetto){
         pacchettiCreati.remove(pacchetto);
     }
+
     public void modificaNome(PacchettoDiProdotti pacchetto, String nome) {
         pacchetto.setNome(nome);
     }

@@ -1,11 +1,9 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
-import cs.unicam.filiera_agricola.Utenti.UtenteRepository;
-import cs.unicam.filiera_agricola.Vendita.Venditore;
+import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +24,22 @@ public class HandlerProdotti {
     @Autowired
     private ProcessiTrasformazioneRepository processiTrasformazioneRepository;
     @Autowired
-    private UtenteRepository utenteRepository;
+    private UtentiRepository utentiRepository;
+
+    public HandlerProdotti() {
+    }
+
+    @Autowired
+    public HandlerProdotti(ProdottiRepository prodottiRepository, PacchettiDiProdottiRepository pacchettiDiProdottiRepository,
+                           DescrizioniRepository descrizioniRepository, CertificazioniRepository certificazioniRepository,
+                           ProcessiTrasformazioneRepository processiTrasformazioneRepository, UtentiRepository utentiRepository) {
+        this.prodottiRepository = prodottiRepository;
+        this.pacchettiDiProdottiRepository = pacchettiDiProdottiRepository;
+        this.descrizioniRepository = descrizioniRepository;
+        this.certificazioniRepository = certificazioniRepository;
+        this.processiTrasformazioneRepository = processiTrasformazioneRepository;
+        this.utentiRepository = utentiRepository;
+    }
 
     private static HandlerProdotti instance = new HandlerProdotti();
 
@@ -55,7 +68,7 @@ public class HandlerProdotti {
 //        certificazioniRepository.save(certificazione2);
 
         // Prodotto trasformato
-        Prodotto prodottoTrasformato = new Prodotto("Passata di pomodoro", 2.5, LocalDate.now());
+        Prodotto prodottoTrasformato = new Prodotto("Passata di pomodoro", 2.5, LocalDate.now().minusDays(2));
         Descrizione descrizioneTrasformata = new Descrizione("Passata di pomodoro", 10, true);
         Certificazione certificazioneTrasformata1 = new Certificazione("Biologico");
         ProcessoTrasformazione processoTrasformazione = new ProcessoTrasformazione("Passata di pomodoro", "Pomodoro rosso");
@@ -72,7 +85,7 @@ public class HandlerProdotti {
         Prodotto prodottoBuilder = new ProdottoSingoloBuilder()
                 .setNome("Zucchina")
                 .setPrezzo(1.0)
-                .setDataScadenza(LocalDate.now())
+                .setDataScadenza(LocalDate.now().minusYears(1))
                 .setDescrizione(new Descrizione("Zucchina verde", 10, true))
                 .setCertificazione(new Certificazione("Biologico"))
                 .build();
@@ -103,8 +116,8 @@ public class HandlerProdotti {
     }
 
     // Aggiunge un prodotto
-    @PostMapping(value = "/addProdotto")
-    public ResponseEntity<Object> addProdotto(@RequestBody Prodotto prodotto) {
+    @PostMapping(value = "/prodotti/crea")
+    public ResponseEntity<String> addProdotto(@RequestBody Prodotto prodotto) {
         if (!prodottiRepository.existsById(prodotto.getId())) {
             prodottiRepository.save(prodotto);
             return ResponseEntity.ok("Prodotto aggiunto");
@@ -113,8 +126,8 @@ public class HandlerProdotti {
     }
 
     // Elimina un prodotto
-    @DeleteMapping(value = "/prodotti/{id}")
-    public ResponseEntity<Object> deleteProdotto(@PathVariable int id) {
+    @DeleteMapping(value = "/prodotti/elimina/{id}")
+    public ResponseEntity<String> deleteProdotto(@PathVariable int id) {
         if (prodottiRepository.existsById(id)) {
             Prodotto prodotto = prodottiRepository.findById(id).get();
             pacchettiDiProdottiRepository.findAll().forEach(
@@ -134,9 +147,10 @@ public class HandlerProdotti {
             return ResponseEntity.badRequest().body("Prodotto non esistente");
     }
 
+    /*
     // Aggiorna un prodotto
-    @PutMapping(value = "/prodotti/{id}")
-    public ResponseEntity<Object> updateProdotto(@PathVariable int id, @RequestBody Prodotto prodotto) {
+    @PutMapping(value = "/prodotti/modifica/{id}")
+    public ResponseEntity<String> updateProdotto(@PathVariable int id, @RequestBody Prodotto prodotto) {
         if (prodottiRepository.existsById(id)) {
             // prodottiListRepository.deleteById(id);
             prodottiRepository.save(prodotto);
@@ -144,6 +158,32 @@ public class HandlerProdotti {
         } else
             return ResponseEntity.badRequest().body("Prodotto non esistente");
     }
+
+     */
+    @PutMapping(value = "/prodotti/modifica/{id}")
+    public ResponseEntity<String> updateProdotto(@PathVariable int id, @RequestBody Prodotto prodottoModificato) {
+    Optional<Prodotto> prodottoOpt = prodottiRepository.findById(id);
+        if(prodottoOpt.isPresent()) {
+        Prodotto prodotto = prodottoOpt.get();
+
+        if (prodottoModificato.getNome() != null) {
+            prodotto.setNome(prodottoModificato.getNome());
+        }
+        if (prodottoModificato.getPrezzo() > 0) {
+            prodotto.setPrezzo(prodottoModificato.getPrezzo());
+        }
+        if (prodottoModificato.getDataScadenza() != null) {
+            prodotto.setDataScadenza(prodottoModificato.getDataScadenza());
+        }
+        if (prodottoModificato.getDescrizione() != null) {
+            prodotto.setDescrizione(prodottoModificato.getDescrizione());
+        }
+        prodottiRepository.save(prodotto);
+        return ResponseEntity.ok("Prodotto modificato con successo.");
+    } else {
+            return ResponseEntity.badRequest().body("Prodotto non trovato.");
+        }
+}
 
     // Ritorna tutti i pacchetti di prodotti
     @GetMapping(value = "/pacchetti")
@@ -161,7 +201,8 @@ public class HandlerProdotti {
     }
 
     // Aggiunge un pacchetto di prodotti
-    @PostMapping(value = "/addPacchetto")
+    //@CrossOrigin
+    @PostMapping(value = "/pacchetti/crea")
     public ResponseEntity<Object> addPacchetto(@RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
         if (!pacchettiDiProdottiRepository.existsById(pacchettoDiProdotti.getId())) {
             pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
@@ -171,7 +212,7 @@ public class HandlerProdotti {
     }
 
     // Elimina un pacchetto di prodotti
-    @DeleteMapping(value = "/pacchetti/{id}")
+    @DeleteMapping(value = "/pacchetti/elimina/{id}")
     public ResponseEntity<Object> deletePacchetto(@PathVariable int id) {
         if (pacchettiDiProdottiRepository.existsById(id)) {
             pacchettiDiProdottiRepository.deleteById(id);
@@ -181,7 +222,7 @@ public class HandlerProdotti {
     }
 
     // Aggiorna un pacchetto di prodotti
-    @PutMapping(value = "/pacchetti/{id}")
+    @PutMapping(value = "/pacchetti/modifica/{id}")
     public ResponseEntity<Object> updatePacchetto(@PathVariable int id, @RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
         if (pacchettiDiProdottiRepository.existsById(id)) {
             pacchettiDiProdottiRepository.save(pacchettoDiProdotti);

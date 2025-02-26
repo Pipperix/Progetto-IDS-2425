@@ -17,8 +17,8 @@ public class Curatore extends UtenteRegistrato {
     // costruttore vuoto necessario per JPA
     public Curatore() {}
 
-    public Curatore(String username, String nome, String cognome, String email, String password, Luogo luogo) {
-        super(username, nome, cognome, email, password, luogo, Ruolo.CURATORE);
+    public Curatore(String username, String nomeUtente, String cognome, String email, String password, Luogo luogo) {
+        super(username, nomeUtente, cognome, email, password, luogo, Ruolo.CURATORE);
     }
 
     @Transactional // garantisce che l'approvazione sia salvata correttamente

@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cs.unicam.filiera_agricola.Vendita.Venditore;
 import jakarta.persistence.*;
@@ -25,8 +26,9 @@ public class Prodotto {
     @JsonManagedReference
     private Descrizione descrizione;
 
-    @ManyToMany(mappedBy = "prodotti")
-    @JsonBackReference
+    @ManyToMany(mappedBy = "prodotti", cascade = CascadeType.ALL)
+    //@JsonBackReference
+    @JsonIgnore
     private Set<PacchettoDiProdotti> pacchetti = new HashSet<>();
 
     @ManyToOne
@@ -41,6 +43,15 @@ public class Prodotto {
         this.prezzo = prezzo;
         this.dataScadenza = dataScadenza;
         //this.venditore = venditore;
+    }
+
+    public Prodotto(Prodotto prodotto) {
+        this.nome = prodotto.getNome();
+        this.prezzo = prodotto.getPrezzo();
+        this.dataScadenza = prodotto.getDataScadenza();
+        this.descrizione = prodotto.getDescrizione();
+        //this.pacchetti = prodotto.getPacchetti();
+        //this.venditore = prodotto.getVenditore();
     }
 
     public int getId() {

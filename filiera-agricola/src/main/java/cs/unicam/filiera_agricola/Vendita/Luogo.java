@@ -2,8 +2,8 @@ package cs.unicam.filiera_agricola.Vendita;
 import jakarta.persistence.*;
 
 @Embeddable
-public class Luogo{
-    private String nome;
+public class Luogo {
+    private String nomeLuogo;
     double latitudine;
     double longitudine;
     @Embedded
@@ -11,19 +11,19 @@ public class Luogo{
 
     public Luogo() {}
 
-    public Luogo(String nome, Indirizzo indirizzo, double latitudine, double longitudine) {
-        this.nome = nome;
+    public Luogo(String nomeLuogo, Indirizzo indirizzo, double latitudine, double longitudine) {
+        this.nomeLuogo = nomeLuogo;
         this.indirizzo = indirizzo;
         this.latitudine = latitudine;
         this.longitudine = longitudine;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeLuogo() {
+        return nomeLuogo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeLuogo(String nomeLuogo) {
+        this.nomeLuogo = nomeLuogo;
     }
 
     public Indirizzo getIndirizzo() {
