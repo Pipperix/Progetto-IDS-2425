@@ -82,7 +82,7 @@ public class Acquirente extends UtenteRegistrato {
         for (CarrelloItem item : carrello) {
             prodottiNelCarrello.put(item.getProdotto(), item.getQuantita());
             // Effettua il pagamento
-            HandlerPagamenti.getInstance().effettuaPagamento(this, metodoPagamento);
+            HandlerPagamenti.getInstance().effettuaPagamento(this.getUsername(), metodoPagamento);
             // Creazione nuovo ordine con i prodotti nel carrello
             handlerOrdine.creaOrdine(this.getId(), prodottiNelCarrello, metodoPagamento);
             this.svuotaCarrello();

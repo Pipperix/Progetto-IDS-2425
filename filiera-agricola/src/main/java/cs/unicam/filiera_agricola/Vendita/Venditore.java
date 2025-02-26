@@ -55,9 +55,9 @@ public class Venditore extends UtenteRegistrato {
         }
     }
 
-    public void modificaDescrizione(Prodotto prodotto, String descrizione){
+    public void modificaDescrizione(Prodotto prodotto, String dettaglio){
         if (prodottiCreati.contains(prodotto) && prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().setDescrizione(descrizione);
+            prodotto.getDescrizione().setDettaglio(dettaglio);
         }
     }
 

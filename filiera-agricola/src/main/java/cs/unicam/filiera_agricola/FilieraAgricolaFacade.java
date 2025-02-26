@@ -7,6 +7,8 @@ import cs.unicam.filiera_agricola.Piattaforma.HandlerPiattaforma;
 import cs.unicam.filiera_agricola.Utenti.HandlerUtenti;
 import cs.unicam.filiera_agricola.Utenti.Social;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
+import cs.unicam.filiera_agricola.Vendita.HandlerPagamenti;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Map;
 
@@ -17,25 +19,26 @@ public class FilieraAgricolaFacade {
     private final HandlerOrdine handlerOrdine;
     private final HandlerProdotti handlerProdotti;
     private final HandlerPiattaforma handlerPiattaforma;
-    //private final HandlerPagamenti handlerPagamenti;
     private final HandlerUtenti handlerUtenti;
+    private final HandlerPagamenti handlerPagamenti;
 
     private static FilieraAgricolaFacade instance = new FilieraAgricolaFacade(HandlerEventi.getInstance(), HandlerOrdine.getInstance(),
-            HandlerProdotti.getInstance(), HandlerPiattaforma.getInstance(), HandlerUtenti.getInstance());
+            HandlerProdotti.getInstance(), HandlerPiattaforma.getInstance(), HandlerUtenti.getInstance(), HandlerPagamenti.getInstance());
 
     public static FilieraAgricolaFacade getInstance() {
         return instance;
     }
 
+    @Autowired // per Dependency Injection
     public FilieraAgricolaFacade (HandlerEventi handlerEventi, HandlerOrdine handlerOrdine,
                                   HandlerProdotti handlerProdotti, HandlerPiattaforma handlerPiattaforma,
-                                  HandlerUtenti handlerUtenti) {
+                                  HandlerUtenti handlerUtenti, HandlerPagamenti handlerPagamenti) {
         this.handlerEventi = handlerEventi;
         this.handlerOrdine = handlerOrdine;
         this.handlerProdotti = handlerProdotti;
         this.handlerPiattaforma = handlerPiattaforma;
-        // this.handlerPagamenti = handlerPagamenti;
         this.handlerUtenti = handlerUtenti;
+        this.handlerPagamenti = handlerPagamenti;
     }
 
     // HandlerEventi
@@ -150,6 +153,11 @@ public class FilieraAgricolaFacade {
     //public ResponseEntity<String> condivisioneSuSocial(@RequestParam int prodottoId, @RequestParam Social social, @RequestParam String username, @RequestParam String password) {
     public void condivisioneSuSocial(int prodottoId, Social social, String username, String password) {
         handlerUtenti.condivisioneSuSocial(prodottoId, social, username, password);
+    }
+
+    // HandlerPagamenti
+    public void effettuaPagamento(String username, MetodoPagamento metodoDiPagamento) {
+        handlerPagamenti.effettuaPagamento(username, metodoDiPagamento);
     }
 
 

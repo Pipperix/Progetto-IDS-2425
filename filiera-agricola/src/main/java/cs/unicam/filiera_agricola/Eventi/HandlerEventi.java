@@ -6,6 +6,7 @@ import cs.unicam.filiera_agricola.Vendita.Indirizzo;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +56,7 @@ public class HandlerEventi {
             return ResponseEntity.badRequest().body("Prodotto non esistente");
     }
 
-    @PutMapping(value = "/modifica/{id}")
+    @PutMapping(value = "/modifica/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> modificaEvento(@PathVariable int id, @RequestBody Evento eventoModificato) {
         Optional<Evento> eventoOpt = eventoRepository.findById(id);
 
@@ -120,7 +121,7 @@ public class HandlerEventi {
         }
     }
 
-    /*
+
     @GetMapping("/{eventoId}/prenotati")
     public ResponseEntity<Set<UtenteRegistrato>> getPrenotati(@PathVariable int eventoId) {
         Optional<Evento> eventoOpt = eventoRepository.findById(eventoId);
@@ -130,11 +131,14 @@ public class HandlerEventi {
             return ResponseEntity.notFound().build();
         }
     }
-     */
+
+    /*
     @GetMapping("/{eventoId}/prenotati")
     public ResponseEntity<Set<UtenteRegistrato>> getPrenotati(@PathVariable int eventoId) {
         return ResponseEntity.ok(eventoRepository.findById(eventoId).get().getUtentiPrenotati());
     }
+
+     */
 
     @PostConstruct
     public void init() {
@@ -144,6 +148,7 @@ public class HandlerEventi {
 
             //Posizione posizione1 = new Posizione(43.717899, 10.408900);
             //Posizione posizione2 = new Posizione(43.717899, 10.408900);
+
 
             Evento evento1 = new Evento("Fiera Bio", "Agricoltura", "Esposizione di prodotti biologici",
                     LocalDateTime.now().plusDays(10), LocalDateTime.now().plusDays(11),

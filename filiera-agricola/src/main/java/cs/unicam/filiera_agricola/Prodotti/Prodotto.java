@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cs.unicam.filiera_agricola.Vendita.Venditore;
@@ -19,20 +20,17 @@ public class Prodotto {
     private double prezzo;
     private LocalDate dataScadenza;
 
-    @Column(nullable = false)
-    private boolean approvato = false;
-
-    @OneToOne(mappedBy = "prodotto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "prodotto", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Descrizione descrizione;
 
-    @ManyToMany(mappedBy = "prodotti", cascade = CascadeType.ALL)
-    //@JsonBackReference
-    @JsonIgnore
+    @ManyToMany(mappedBy = "prodotti")
+    @JsonBackReference
+    //@JsonIgnore
     private Set<PacchettoDiProdotti> pacchetti = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "venditore_id", nullable = true)
+    @JoinColumn(name = "venditore_id")
     @JsonBackReference // Evita la serializzazione del venditore nel JSON del prodotto
     private Venditore venditore;
 
@@ -45,11 +43,11 @@ public class Prodotto {
         //this.venditore = venditore;
     }
 
-    public Prodotto(Prodotto prodotto) {
-        this.nome = prodotto.getNome();
-        this.prezzo = prodotto.getPrezzo();
-        this.dataScadenza = prodotto.getDataScadenza();
-        this.descrizione = prodotto.getDescrizione();
+    public Prodotto(String nome, double prezzo, LocalDate dataScadenza, Descrizione descrizione) {
+        this.nome = nome;
+        this.prezzo = prezzo;
+        this.dataScadenza = dataScadenza;
+        this.descrizione = descrizione;
         //this.pacchetti = prodotto.getPacchetti();
         //this.venditore = prodotto.getVenditore();
     }
@@ -114,14 +112,6 @@ public class Prodotto {
     public void setVenditore(Venditore venditore) {
         this.venditore = venditore;
         venditore.creaProdotto(this); // Imposta il riferimento bidirezionale
-    }
-
-    public boolean isApprovato() {
-        return approvato;
-    }
-
-    public void setApprovato(boolean approvato) {
-        this.approvato = approvato;
     }
 
 }

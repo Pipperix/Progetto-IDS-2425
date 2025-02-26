@@ -42,7 +42,6 @@ import java.util.Optional;
 
         @PostMapping(value = "/registrazione")
         public ResponseEntity<Object> registrazione(@RequestBody UtenteRegistrato nuovoUtente) {
-        //public ResponseEntity<Object> registrazione(UtenteRegistrato nuovoUtente) {
             // Controllo se username è già in uso
             if (utentiRepository.findByUsername(nuovoUtente.getUsername()).isPresent()) {
                 return ResponseEntity.badRequest().body("Utente già registrato. Esegui l'autenticazione");
@@ -63,7 +62,6 @@ import java.util.Optional;
 
         @PostMapping("/login")
         public ResponseEntity<Object> autenticazione(@RequestParam String username, @RequestParam String password) {
-        //public ResponseEntity<Object> autenticazione(String username, String password) {
                 Optional<UtenteRegistrato> user = utentiRepository.findByUsername(username);
             if (user.isPresent() && user.get().getPassword().equals(password)) {
                 return ResponseEntity.ok("Login effettuato");
@@ -73,7 +71,6 @@ import java.util.Optional;
 
         @PostMapping("/logout")
         public ResponseEntity<Object> disconnessione(@RequestParam String username) {
-        //public ResponseEntity<Object> disconnessione(String username) {
                 Optional<UtenteRegistrato> user = utentiRepository.findByUsername(username);
             if (user.isPresent()) {
                 return ResponseEntity.ok("Logout effettuato");
@@ -83,7 +80,6 @@ import java.util.Optional;
 
         @PutMapping("/modifica-dati/{id}")
         public ResponseEntity<String> modificaDatiUtente(@PathVariable int id, @RequestBody UtenteRegistrato nuovoUtente) {
-        //public ResponseEntity<String> modificaDatiUtente(int id, UtenteRegistrato nuovoUtente) {
             // Recupera l'utente dal database
             Optional<UtenteRegistrato> utenteOpt = utentiRepository.findById(id);
 
@@ -92,13 +88,13 @@ import java.util.Optional;
 
                 // Aggiorna i dati dell'utente
                 if (nuovoUtente.getUsername() != null) {
-                    utente.setUsername(nuovoUtente.getUsername());  // Modifica il nome
+                    utente.setUsername(nuovoUtente.getUsername());  // Modifica lo userrname
                 }
                 if (nuovoUtente.getNomeUtente() != null) {
                     utente.setNomeUtente(nuovoUtente.getNomeUtente());  // Modifica il nome
                 }
                 if (nuovoUtente.getCognome() != null) {
-                    utente.setCognome(nuovoUtente.getCognome());  // Modifica il nome
+                    utente.setCognome(nuovoUtente.getCognome());  // Modifica il cognome
                 }
                 if (nuovoUtente.getEmail() != null) {
                     utente.setEmail(nuovoUtente.getEmail());  // Modifica l'email
@@ -172,6 +168,12 @@ import java.util.Optional;
                         67.568997, 31.354687), Ruolo.TRASFORMATORE);
 
                 utentiRepository.save(utente2);
+
+                UtenteRegistrato utente3 = new UtenteRegistrato("acquirente", "Luca", "Rossi",
+                        "luca.rossi@gmail.com", "12345", new Luogo("Piazza Galli", indirizzo1,
+                        43.717899, 10.408900), Ruolo.ACQUIRENTE);
+                utentiRepository.save(utente3);
+
             }
         }
 

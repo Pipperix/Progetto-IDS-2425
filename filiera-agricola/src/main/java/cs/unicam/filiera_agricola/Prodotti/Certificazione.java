@@ -11,7 +11,7 @@ public class Certificazione {
     private String nome;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "descrizione_id", nullable = true)
+    @JoinColumn(name = "descrizione_id")
     @JsonBackReference
     private Descrizione descrizione;
 

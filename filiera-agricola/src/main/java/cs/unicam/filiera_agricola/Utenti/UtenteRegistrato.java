@@ -5,6 +5,7 @@ import cs.unicam.filiera_agricola.Eventi.Evento;
 import cs.unicam.filiera_agricola.Eventi.HandlerEventi;
 import cs.unicam.filiera_agricola.FilieraAgricolaFacade;
 import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
+import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,12 +26,10 @@ public class UtenteRegistrato implements Utente {
 
     @Column(unique = true) // username unico
     private String username;
-    //@Column(insertable = false, updatable = false) // per evitare duplicati nella colonna
     private String nomeUtente;
     private String cognome;
     private String email;
     private String password;
-    //private LocalDate dataDiNascita;
     @Embedded
     private Luogo luogo;
     @Column(nullable = false)
@@ -75,36 +75,36 @@ public class UtenteRegistrato implements Utente {
     // Signup (utente già registrato)
     @Override
     public boolean registrazione() {
-        HandlerUtenti.getInstance().registrazione(UtenteRegistrato.this);
+        FilieraAgricolaFacade.getInstance().registrazione(UtenteRegistrato.this);
         return true;
     }
 
     // Metodo per la visualizzazione dei contenuti (prodotti) presenti nel sistema
     @Override
-    public ResponseEntity<Object>  visualizzaContenuti() {
-        return HandlerProdotti.getInstance().getProdotti();
+    public void visualizzaContenuti() {
+        FilieraAgricolaFacade.getInstance().getProdotti();
     }
 
     @Override
-    public ResponseEntity<Object> visualizzaDescrizione(int id) {
-        return HandlerProdotti.getInstance().getProdotto(id);
+    public void visualizzaDescrizione(int id) {
+        FilieraAgricolaFacade.getInstance().getProdotto(id);
     }
 
-    public ResponseEntity<String> modificaDatiUtente(UtenteRegistrato nuovoUtente) {
-        return HandlerUtenti.getInstance().modificaDatiUtente(this.getId(), nuovoUtente);
+    public void modificaDatiUtente(UtenteRegistrato nuovoUtente) {
+        FilieraAgricolaFacade.getInstance().modificaDatiUtente(this.getId(), nuovoUtente);
     }
 
-    public ResponseEntity<String> condivisioneSuSocial(int prodottoId, Social social) {
-        return HandlerUtenti.getInstance().condivisioneSuSocial(prodottoId, social, username, password);
+    public void condivisioneSuSocial(int prodottoId, Social social) {
+        FilieraAgricolaFacade.getInstance().condivisioneSuSocial(prodottoId, social, username, password);
     }
 
     @Override
     public void visualizzaMappa() {
-        HandlerUtenti.getInstance().visualizzaMappa();
+        FilieraAgricolaFacade.getInstance().visualizzaMappa();
     }
 
     public void prenotaEvento(int eventoId, String username) {
-        HandlerEventi.getInstance().prenotaEvento(eventoId, username);
+        FilieraAgricolaFacade.getInstance().prenotaEvento(eventoId, username);
     }
 
     public boolean isAutorizzato() {

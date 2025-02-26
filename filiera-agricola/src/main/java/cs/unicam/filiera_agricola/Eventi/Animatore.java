@@ -4,8 +4,6 @@ import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
-import org.springframework.http.ResponseEntity;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +14,6 @@ public class Animatore extends UtenteRegistrato {
     @OneToMany(mappedBy = "animatore", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Evento> eventiCreati;
 
-    //private final HandlerEventi handlerEventi = new HandlerEventi();
-
     public Animatore() {
         super(); // Necessario per JPA
     }
@@ -26,20 +22,6 @@ public class Animatore extends UtenteRegistrato {
                      Luogo luogo) {
         super(username, nomeUtente, cognome, email, password, luogo, Ruolo.ANIMATORE);
         this.eventiCreati = new ArrayList<>();
-    }
-
-    public ResponseEntity<String> creaEvento(Evento evento) {
-        return HandlerEventi.getInstance().creaEvento(evento);
-        // return handlerEventi.creaEvento(evento);
-    }
-
-    public ResponseEntity<String> modificaEvento() {
-        Evento nuovoEvento = new Evento();
-        return HandlerEventi.getInstance().modificaEvento(this.getId(), nuovoEvento);
-    }
-
-    public ResponseEntity<String> eliminaEvento(Evento evento) {
-        return HandlerEventi.getInstance().eliminaEvento(evento.getId());
     }
 
     public List<Evento> getEventiCreati() {

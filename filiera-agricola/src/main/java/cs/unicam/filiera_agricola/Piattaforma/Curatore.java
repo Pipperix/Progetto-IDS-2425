@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Piattaforma;
 
+import cs.unicam.filiera_agricola.FilieraAgricolaFacade;
 import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
@@ -22,7 +23,7 @@ public class Curatore extends UtenteRegistrato {
     }
 
     @Transactional // garantisce che l'approvazione sia salvata correttamente
-    public ResponseEntity<String> approvaContenuto(Prodotto prodotto) {
-        return HandlerProdotti.getInstance().approvaContenuto(prodotto.getId());
+    public void approvaContenuto(Prodotto prodotto, FilieraAgricolaFacade facade) {
+        facade.approvaContenuto(prodotto.getId());
     }
 }

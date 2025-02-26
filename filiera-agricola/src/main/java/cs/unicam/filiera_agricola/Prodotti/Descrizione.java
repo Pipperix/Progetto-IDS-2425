@@ -2,6 +2,7 @@ package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,45 +12,46 @@ public class Descrizione {
     @Id
     @Column(name = "prodotto_id")
     private int id;
-    private String descrizione;
+    private String dettaglio;
     private int quantita;
-    private boolean approvato;
+    @Column
+    private boolean approvato = false;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
-    //@JsonBackReference(value = "prodotto-descrizione")
     @JsonBackReference
     private Prodotto prodotto;
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    //@JsonManagedReference(value = "descrizione-certificazioni")
     @JsonManagedReference
     private Set<Certificazione> certificazioni = new HashSet<>();
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    //@JsonManagedReference(value = "descrizione-processi")
     @JsonManagedReference
     private Set<ProcessoTrasformazione> processiTrasformazione = new HashSet<>();
 
-    public Descrizione() {}
-
-    public Descrizione(String descrizione, int quantita, boolean approvato) {
-        this.descrizione = descrizione;
-        this.quantita = quantita;
-        this.approvato = approvato;
+    public Descrizione() {
     }
 
-    public Descrizione(String descrizione, int quantita, Set<Certificazione> certificazioni,
-                       Set<ProcessoTrasformazione> processitrasformazione) {
-        this.descrizione = descrizione;
+    public Descrizione(String dettaglio, int quantita) {
+        this.dettaglio = dettaglio;
+        this.quantita = quantita;
+        this.approvato = false;
+    }
+
+    /*
+    public Descrizione(String dettaglio, int quantita, Set<Certificazione> certificazioni,
+                       Set<ProcessoTrasformazione> processiTrasformazione) {
+        this.dettaglio = dettaglio;
         this.quantita = quantita;
         this.certificazioni = certificazioni;
-        this.processiTrasformazione = processitrasformazione;
+        this.processiTrasformazione = processiTrasformazione;
     }
+     */
 
-    public String getDescrizione() {
-        return descrizione;
+    public String getDettaglio() {
+        return dettaglio;
     }
 
     public int getQuantita() {
@@ -68,8 +70,8 @@ public class Descrizione {
         return processiTrasformazione;
     }
 
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
+    public void setDettaglio(String dettaglio) {
+        this.dettaglio = dettaglio;
     }
 
     public void setQuantita(int quantita) {

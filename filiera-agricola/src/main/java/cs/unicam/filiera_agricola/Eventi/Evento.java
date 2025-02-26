@@ -2,7 +2,6 @@ package cs.unicam.filiera_agricola.Eventi;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
@@ -20,9 +19,9 @@ public class Evento {
     private String descrizioneEvento;
     private LocalDateTime dataInizio;
     private LocalDateTime dataFine;
+    private int capienzaPersone;
     @Embedded
     private Luogo luogo;
-    private int capienzaPersone;
 
     @ManyToOne
     @JoinColumn(name = "animatoreId", insertable=false, updatable=false)
@@ -50,8 +49,8 @@ public class Evento {
 
     public Evento() {}
 
-    public Evento(String nomeEvento, String tipo, String descrizioneEvento, LocalDateTime dataInizio, LocalDateTime dataFine,
-                  Luogo luogo, int capienzaPersone) {
+    public Evento(String nomeEvento, String tipo, String descrizioneEvento, LocalDateTime dataInizio,
+                  LocalDateTime dataFine, Luogo luogo, int capienzaPersone) {
         this.nomeEvento = nomeEvento;
         this.tipo = tipo;
         this.descrizioneEvento = descrizioneEvento;
@@ -65,70 +64,54 @@ public class Evento {
     public int getId() {
         return id;
     }
-
     public String getNomeEvento() {
         return nomeEvento;
     }
-
     public String getTipo() {
         return tipo;
     }
-
     public LocalDateTime getDataInizio() {
         return dataInizio;
     }
-
     public LocalDateTime getDataFine() {
         return dataFine;
     }
-
     public Luogo getLuogo() {
         return luogo;
     }
-
     public String getDescrizioneEvento() {
         return descrizioneEvento;
     }
-
     public int getCapienzaPersone() {
         return capienzaPersone;
     }
-
     public Animatore getAnimatore() { return animatore; }
-
     public Set<UtenteRegistrato> getUtentiPrenotati() {
         return utentiPrenotati;
     }
 
     // Setter
     public void setNomeEvento(String nomeEvento) {
-        this.nomeEvento = Objects.requireNonNull(nomeEvento, "Il nome non può essere nullo.");
+        this.nomeEvento = nomeEvento;
     }
-
     public void setTipo(String tipo) {
         this. tipo = tipo;
     }
-
     public void setDataInizio(LocalDateTime dataInizio) {
-        this.dataInizio = Objects.requireNonNull(dataInizio, "La data d'inizio non può essere nullo.");
+        this.dataInizio = dataInizio;
     }
-
     public void setDataFine(LocalDateTime dataFine) {
         this.dataFine = dataFine;
     }
-
     public void setLuogo(Luogo luogo) {
-        this.luogo = Objects.requireNonNull(luogo, "Il luogo non può essere nullo.");
+        this.luogo = luogo;
     }
-
     public void setDescrizioneEvento(String descrizioneEvento) {
         this.descrizioneEvento = descrizioneEvento;
     }
-
     public void setCapienzaPersone(int capienzaPersone) {
         this.capienzaPersone = capienzaPersone;
     }
-
     public void setAnimatore(Animatore animatore) { this.animatore = animatore; }
 
 }

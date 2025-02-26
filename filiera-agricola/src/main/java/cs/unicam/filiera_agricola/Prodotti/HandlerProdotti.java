@@ -55,7 +55,7 @@ public class HandlerProdotti {
 
         // Prodotto
         Prodotto prodotto = new Prodotto("Pomodoro", 1.5, LocalDate.now());
-        Descrizione descrizione = new Descrizione("Pomodoro rosso", 10, true);
+        Descrizione descrizione = new Descrizione("Pomodoro rosso", 10);
         Certificazione certificazione1 = new Certificazione("Biologico");
         Certificazione certificazione2 = new Certificazione("DOP");
 
@@ -69,7 +69,7 @@ public class HandlerProdotti {
 
         // Prodotto trasformato
         Prodotto prodottoTrasformato = new Prodotto("Passata di pomodoro", 2.5, LocalDate.now().minusDays(2));
-        Descrizione descrizioneTrasformata = new Descrizione("Passata di pomodoro", 10, true);
+        Descrizione descrizioneTrasformata = new Descrizione("Passata di pomodoro", 10);
         Certificazione certificazioneTrasformata1 = new Certificazione("Biologico");
         ProcessoTrasformazione processoTrasformazione = new ProcessoTrasformazione("Passata di pomodoro", "Pomodoro rosso");
 
@@ -86,7 +86,7 @@ public class HandlerProdotti {
                 .setNome("Zucchina")
                 .setPrezzo(1.0)
                 .setDataScadenza(LocalDate.now().minusYears(1))
-                .setDescrizione(new Descrizione("Zucchina verde", 10, true))
+                .setDescrizione(new Descrizione("Zucchina verde", 10))
                 .setCertificazione(new Certificazione("Biologico"))
                 .build();
 
@@ -115,6 +115,7 @@ public class HandlerProdotti {
             return ResponseEntity.badRequest().body("Prodotto non esistente");
     }
 
+    /*
     // Aggiunge un prodotto
     @PostMapping(value = "/prodotti/crea")
     public ResponseEntity<String> addProdotto(@RequestBody Prodotto prodotto) {
@@ -123,6 +124,14 @@ public class HandlerProdotti {
             return ResponseEntity.ok("Prodotto aggiunto");
         } else
             return ResponseEntity.badRequest().body("Prodotto già esistente");
+    }
+
+     */
+
+    @PostMapping(value = "/prodotti/crea")
+    public ResponseEntity<String> addProdotto(@RequestBody Prodotto prodotto) {
+            prodottiRepository.save(prodotto);
+            return ResponseEntity.ok("Prodotto aggiunto");
     }
 
     // Elimina un prodotto
@@ -238,8 +247,8 @@ public class HandlerProdotti {
         Optional<Prodotto> prodottoOpt = prodottiRepository.findById(id);
         if (prodottoOpt.isPresent()) {
             Prodotto prodotto = prodottoOpt.get();
-            if (!prodotto.isApprovato()) {
-                prodotto.setApprovato(true);
+            if (!prodotto.getDescrizione().isApprovato()) {
+                prodotto.getDescrizione().setApprovato(true);
                 prodottiRepository.save(prodotto);
                 return ResponseEntity.ok("Prodotto approvato con successo.");
             } else {
@@ -254,7 +263,7 @@ public class HandlerProdotti {
     // @Transactional
     // Modifica quantità di un prodotto
     @PutMapping(value = "/prodotti/{id}/quantita")
-    public ResponseEntity<String> modificaQuantita(@PathVariable int id, @RequestBody int quantita) {
+    public ResponseEntity<String> modificaQuantita(@PathVariable int id, @RequestParam int quantita) {
         Optional<Prodotto> prodottoOpt = prodottiRepository.findById(id);
         if (prodottoOpt.isPresent()) {
             Prodotto prodotto = prodottoOpt.get();

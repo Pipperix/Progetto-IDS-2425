@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Piattaforma;
 
+import cs.unicam.filiera_agricola.FilieraAgricolaFacade;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
@@ -17,12 +18,12 @@ public class Gestore extends UtenteRegistrato {
         super(username, nomeUtente, cognome, email, password, luogo, Ruolo.GESTORE);
     }
 
-    public ResponseEntity<String> rimuoviProdottiScaduti() {
-        return HandlerPiattaforma.getInstance().rimuoviProdottiScaduti();
+    public void rimuoviProdottiScaduti(FilieraAgricolaFacade facade) {
+        facade.rimuoviProdottiScaduti();
     }
 
-    public ResponseEntity<String> autorizzaAccount(int utenteId) {
-        return HandlerPiattaforma.getInstance().autorizzaAccount(utenteId);
+    public void autorizzaAccount(int utenteId, FilieraAgricolaFacade facade) {
+        facade.autorizzaAccount(utenteId);
     }
 
 }
