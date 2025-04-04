@@ -18,15 +18,16 @@ public class Prodotto {
     private int id;
     private String nome;
     private double prezzo;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataScadenza;
 
     @OneToOne(mappedBy = "prodotto", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference(value = "prodotto-descrizione")// Gestisce la parte "principale" della relazione
     private Descrizione descrizione;
 
     @ManyToMany(mappedBy = "prodotti")
-    @JsonBackReference
-    //@JsonIgnore
+    //@JsonBackReference(value = "pacchetto-prodotti") // Gestisce il lato "back" della relazione
+    @JsonIgnore
     private Set<PacchettoDiProdotti> pacchetti = new HashSet<>();
 
     @ManyToOne

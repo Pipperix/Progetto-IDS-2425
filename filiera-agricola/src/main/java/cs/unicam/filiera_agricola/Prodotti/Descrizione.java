@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
@@ -20,15 +21,15 @@ public class Descrizione {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
-    @JsonBackReference
+    @JsonBackReference(value = "prodotto-descrizione") // Questo è il lato "back" della relazione
     private Prodotto prodotto;
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "descrizione-certificazioni")
     private Set<Certificazione> certificazioni = new HashSet<>();
 
     @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "descrizione-processi")
     private Set<ProcessoTrasformazione> processiTrasformazione = new HashSet<>();
 
     public Descrizione() {

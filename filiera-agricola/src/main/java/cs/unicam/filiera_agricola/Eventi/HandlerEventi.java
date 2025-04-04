@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Eventi;
 
+import cs.unicam.filiera_agricola.Acquisto.Acquirente;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
 import cs.unicam.filiera_agricola.Vendita.Indirizzo;
@@ -36,8 +37,25 @@ public class HandlerEventi {
         return instance;
     }
 
-    @PostMapping(value = "/crea")
-    public ResponseEntity<String> creaEvento(@RequestBody Evento evento) {
+    @PostMapping(value = "/{animatoreId}/crea", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> creaEvento(@PathVariable int animatoreId, @RequestBody Evento evento) {
+        // Recupero l'utente in base all'ID
+        Optional<UtenteRegistrato> utenteOpt = utentiRepository.findById(animatoreId);
+        if (utenteOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Utente non trovato.");
+        }
+
+        // Verifico se l'utente è effettivamente un Animatore
+        UtenteRegistrato utente = utenteOpt.get();
+        if (!(utente instanceof Animatore)) {
+            return ResponseEntity.badRequest().body("L'id fornito non corrisponde a un Animatore valido.");
+        }
+
+        // Se l'utente è un Animatore, lo castiamo e associamo all'evento
+        Animatore animatore = (Animatore) utente;
+        evento.setAnimatore(animatore);  // Imposto l'animatore sull'evento
+
+        // Salvo l'evento nel database
         eventoRepository.save(evento);
         return ResponseEntity.ok("Evento aggiunto");
     }

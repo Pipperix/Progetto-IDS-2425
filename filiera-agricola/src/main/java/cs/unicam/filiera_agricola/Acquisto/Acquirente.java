@@ -1,9 +1,10 @@
-package cs.unicam.filiera_agricola.Vendita;
+package cs.unicam.filiera_agricola.Acquisto;
 
 import cs.unicam.filiera_agricola.Prodotti.*;
 import cs.unicam.filiera_agricola.Prodotti.Ordine;
 import cs.unicam.filiera_agricola.Utenti.*;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
+import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import java.util.*;
 
@@ -15,12 +16,14 @@ public class Acquirente extends UtenteRegistrato {
     @ElementCollection
     private Set<Ordine> ordini = new LinkedHashSet<>();
 
- */
+
     @OneToMany(mappedBy = "acquirente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CarrelloItem> carrello = new HashSet<>();
+    private Set<Carrello> carrello = new HashSet<>();
 
     @OneToMany(mappedBy = "acquirente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Ordine> ordini = new LinkedHashSet<>();
+
+ */
 
     @Enumerated(EnumType.STRING)
     private MetodoPagamento metodoPagamento;
@@ -36,14 +39,14 @@ public class Acquirente extends UtenteRegistrato {
     public void aggiungiProdotto(Prodotto prodotto, int quantità){
         carrello.put(prodotto, carrello.getOrDefault(prodotto, 0) + quantità);
     }
-     */
+
     // Aggiungi prodotto al carrello
     public void aggiungiProdotto(Prodotto prodotto, int quantità) {
-        CarrelloItem item = new CarrelloItem(this, prodotto, quantità);
+        Carrello item = new Carrello(this, prodotto, quantità);
         carrello.add(item);  // Aggiungi il prodotto con la quantità al carrello
     }
 
-    /*
+
     public void rimuoviProdotto(Prodotto prodotto, int quantità){
         if (carrello.containsKey(prodotto)) {
             int nuovaQuantita = carrello.get(prodotto) - quantità;
@@ -54,10 +57,10 @@ public class Acquirente extends UtenteRegistrato {
             }
         }
     }
-     */
+
     // Rimuovi prodotto dal carrello
     public void rimuoviProdotto(Prodotto prodotto, int quantita) {
-        for (CarrelloItem item : carrello) {
+        for (Carrello item : carrello) {
             if (item.getProdotto().equals(prodotto)) {
                 int nuovaQuantita = item.getQuantita() - quantita;
                 if (nuovaQuantita > 0) {
@@ -79,7 +82,7 @@ public class Acquirente extends UtenteRegistrato {
         HandlerOrdine handlerOrdine = new HandlerOrdine();
         // Crea la mappa dei prodotti nel carrello
         Map<Prodotto, Integer> prodottiNelCarrello = new HashMap<>();
-        for (CarrelloItem item : carrello) {
+        for (Carrello item : carrello) {
             prodottiNelCarrello.put(item.getProdotto(), item.getQuantita());
             // Effettua il pagamento
             HandlerPagamenti.getInstance().effettuaPagamento(this.getUsername(), metodoPagamento);
@@ -93,9 +96,11 @@ public class Acquirente extends UtenteRegistrato {
         carrello.clear();
     }
 
-    public Set<CarrelloItem> getCarrello() {return carrello;}
+    public Set<Carrello> getCarrello() {return carrello;}
 
     public Set<Ordine> getOrdini() {return ordini;}
 
     public MetodoPagamento getMetodoPagamento() {return metodoPagamento;}
+
+     */
 }

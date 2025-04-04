@@ -128,7 +128,7 @@ public class HandlerProdotti {
 
      */
 
-    @PostMapping(value = "/prodotti/crea")
+    @PostMapping(value = "/prodotti/crea", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addProdotto(@RequestBody Prodotto prodotto) {
             prodottiRepository.save(prodotto);
             return ResponseEntity.ok("Prodotto aggiunto");
@@ -169,7 +169,7 @@ public class HandlerProdotti {
     }
 
      */
-    @PutMapping(value = "/prodotti/modifica/{id}")
+    @PutMapping(value = "/prodotti/modifica/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateProdotto(@PathVariable int id, @RequestBody Prodotto prodottoModificato) {
     Optional<Prodotto> prodottoOpt = prodottiRepository.findById(id);
         if(prodottoOpt.isPresent()) {
@@ -211,7 +211,7 @@ public class HandlerProdotti {
 
     // Aggiunge un pacchetto di prodotti
     //@CrossOrigin
-    @PostMapping(value = "/pacchetti/crea")
+    @PostMapping(value = "/pacchetti/crea", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> addPacchetto(@RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
         if (!pacchettiDiProdottiRepository.existsById(pacchettoDiProdotti.getId())) {
             pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
@@ -231,7 +231,7 @@ public class HandlerProdotti {
     }
 
     // Aggiorna un pacchetto di prodotti
-    @PutMapping(value = "/pacchetti/modifica/{id}")
+    @PutMapping(value = "/pacchetti/modifica/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updatePacchetto(@PathVariable int id, @RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
         if (pacchettiDiProdottiRepository.existsById(id)) {
             pacchettiDiProdottiRepository.save(pacchettoDiProdotti);

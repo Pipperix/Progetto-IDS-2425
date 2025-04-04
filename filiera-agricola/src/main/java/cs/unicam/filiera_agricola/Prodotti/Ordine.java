@@ -1,12 +1,10 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
-import cs.unicam.filiera_agricola.Vendita.Acquirente;
+import cs.unicam.filiera_agricola.Acquisto.Acquirente;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Entity
 public class Ordine {

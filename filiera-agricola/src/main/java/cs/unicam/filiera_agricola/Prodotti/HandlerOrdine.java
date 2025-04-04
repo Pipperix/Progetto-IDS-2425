@@ -2,7 +2,7 @@ package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
-import cs.unicam.filiera_agricola.Vendita.Acquirente;
+import cs.unicam.filiera_agricola.Acquisto.Acquirente;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

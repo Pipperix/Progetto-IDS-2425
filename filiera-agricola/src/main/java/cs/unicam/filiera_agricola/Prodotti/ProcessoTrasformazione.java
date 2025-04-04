@@ -13,7 +13,7 @@ public class ProcessoTrasformazione {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "descrizione_id")
-    @JsonBackReference
+    @JsonBackReference(value = "descrizione-processi")
     private Descrizione descrizione;
 
     public ProcessoTrasformazione() {}

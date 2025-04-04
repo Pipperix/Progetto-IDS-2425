@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Eventi;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
@@ -24,7 +25,8 @@ public class Evento {
     private Luogo luogo;
 
     @ManyToOne
-    @JoinColumn(name = "animatoreId", insertable=false, updatable=false)
+    @JoinColumn(name = "animatoreId")
+    @JsonIgnore
     private Animatore animatore; // Riferimento all'animatore
 
     @ManyToMany
@@ -33,7 +35,7 @@ public class Evento {
             joinColumns = @JoinColumn(name = "evento_id"),
             inverseJoinColumns = @JoinColumn(name = "utente_id")
     )
-    @JsonManagedReference
+    @JsonIgnore
     private Set<UtenteRegistrato> utentiPrenotati = new HashSet<>();
 
     // se c'è disponibilità di posti all'evento, l'utente viene aggiunto alla lista degli utenti prenotati

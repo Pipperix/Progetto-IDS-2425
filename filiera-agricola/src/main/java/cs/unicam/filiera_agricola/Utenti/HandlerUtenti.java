@@ -1,9 +1,10 @@
 package cs.unicam.filiera_agricola.Utenti;
 
+import cs.unicam.filiera_agricola.Acquisto.Acquirente;
+import cs.unicam.filiera_agricola.Eventi.Animatore;
 import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
-import cs.unicam.filiera_agricola.Vendita.Indirizzo;
-import cs.unicam.filiera_agricola.Vendita.Luogo;
+import cs.unicam.filiera_agricola.Vendita.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,15 +50,30 @@ import java.util.Optional;
             // Impostare autorizzato a false automaticamente
             nuovoUtente.setAutorizzato(false);
 
-            // Se il ruolo non è specificato, assegna il valore predefinito UTENTE
-            if (nuovoUtente.getRuolo() == null) {
-                nuovoUtente.setRuolo(Ruolo.UTENTE);
-                utentiRepository.save(nuovoUtente);
+            // Se il ruolo è VENDITORE o sotto-ruolo (come Trasformatore), ottieni la partita IVA
+            String partitaIva = null;
+            if (nuovoUtente.getRuolo() == Ruolo.PRODUTTORE || nuovoUtente.getRuolo() == Ruolo.TRASFORMATORE ||
+                    nuovoUtente.getRuolo() == Ruolo.DISTRIBUTORE) {
+                partitaIva = ((Venditore) nuovoUtente).getPartitaIva(); // Cast per accedere alla partitaIva
             }
-                // Salvare l'utente nel database
-                utentiRepository.save(nuovoUtente);
-                return ResponseEntity.ok("Registrazione completata come " + nuovoUtente.getRuolo() + ". " +
-                        "Attendi l'approvazione da parte di un gestore.");
+
+            // Creazione dell'utente specifico basato sul ruolo
+            UtenteRegistrato utenteSpecifico = UtenteFactory.creaUtente(
+                    nuovoUtente.getRuolo(),
+                    nuovoUtente.getUsername(),
+                    nuovoUtente.getNomeUtente(),
+                    nuovoUtente.getCognome(),
+                    nuovoUtente.getEmail(),
+                    nuovoUtente.getPassword(),
+                    nuovoUtente.getLuogo(),
+                    partitaIva
+            );
+
+            // Salvataggio dell'utente nel database
+            utentiRepository.save(utenteSpecifico);
+
+            return ResponseEntity.ok("Registrazione completata come " + utenteSpecifico.getRuolo() + ". " +
+                    "Attendi l'approvazione da parte di un gestore.");
         }
 
         @PostMapping("/login")
@@ -157,21 +173,21 @@ import java.util.Optional;
                 Indirizzo indirizzo1 = new Indirizzo("Via Napoli", "3", "34677", "Napoli");
                 Indirizzo indirizzo2 = new Indirizzo("Via Torino", "4", "46976", "Torino");
 
-                UtenteRegistrato utente1 = new UtenteRegistrato("chiamer", "Chiara", "Medeiros",
+                Produttore utente1 = new Produttore("chiamer", "Chiara", "Medeiros",
                         "chiara.medei@libero.it", "passwordkia", new Luogo("Cantiani SRL", indirizzo1,
-                        43.717899, 10.408900), Ruolo.PRODUTTORE);
+                        43.717899, 10.408900), "IT123456789");
                         //LocalDate.of(2003, 5, 6)
                 utentiRepository.save(utente1);
 
-                UtenteRegistrato utente2 = new UtenteRegistrato("pipperix", "Fabio", "Fazio",
+                Trasformatore utente2 = new Trasformatore("pipperix", "Fabio", "Fazio",
                         "fabietto68@libero.it", "thegreaterone", new Luogo("Gazzettino s.p.a.", indirizzo2,
-                        67.568997, 31.354687), Ruolo.TRASFORMATORE);
+                        67.568997, 31.354687), "IT123456789");
 
                 utentiRepository.save(utente2);
 
-                UtenteRegistrato utente3 = new UtenteRegistrato("acquirente", "Luca", "Rossi",
+                Acquirente utente3 = new Acquirente("acquirente", "Luca", "Rossi",
                         "luca.rossi@gmail.com", "12345", new Luogo("Piazza Galli", indirizzo1,
-                        43.717899, 10.408900), Ruolo.ACQUIRENTE);
+                        43.717899, 10.408900));
                 utentiRepository.save(utente3);
 
             }

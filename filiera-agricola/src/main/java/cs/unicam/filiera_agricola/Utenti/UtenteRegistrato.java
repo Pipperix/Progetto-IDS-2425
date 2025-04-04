@@ -1,6 +1,7 @@
 package cs.unicam.filiera_agricola.Utenti;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cs.unicam.filiera_agricola.Eventi.Evento;
 import cs.unicam.filiera_agricola.Eventi.HandlerEventi;
 import cs.unicam.filiera_agricola.FilieraAgricolaFacade;
@@ -38,7 +39,7 @@ public class UtenteRegistrato implements Utente {
     private Ruolo ruolo = Ruolo.UTENTE; // Default: UTENTE
 
     @ManyToMany(mappedBy = "utentiPrenotati")
-    @JsonBackReference
+    @JsonIgnore
     private Set<Evento> eventiPrenotati = new HashSet<>();
 
     //private FilieraAgricolaFacade facade;

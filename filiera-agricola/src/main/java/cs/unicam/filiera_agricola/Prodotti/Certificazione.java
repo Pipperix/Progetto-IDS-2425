@@ -12,7 +12,7 @@ public class Certificazione {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "descrizione_id")
-    @JsonBackReference
+    @JsonBackReference(value = "descrizione-certificazioni")
     private Descrizione descrizione;
 
     public Certificazione() {}

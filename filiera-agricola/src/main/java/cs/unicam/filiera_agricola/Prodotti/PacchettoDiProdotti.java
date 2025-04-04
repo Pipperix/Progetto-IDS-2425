@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cs.unicam.filiera_agricola.Vendita.Distributore;
 import jakarta.persistence.*;
@@ -20,7 +21,8 @@ public class PacchettoDiProdotti {
             joinColumns = @JoinColumn(name = "pacchetto_id"), // Colonna per PacchettoDiProdotti
             inverseJoinColumns = @JoinColumn(name = "prodotto_id") // Colonna per Prodotto
     )
-    @JsonManagedReference
+    @JsonIgnoreProperties("pacchetti")
+    //alternativa: @JsonIgnore o niente
     private Set<Prodotto> prodotti = new HashSet<>();
 
     @ManyToOne

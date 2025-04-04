@@ -7,7 +7,7 @@ import cs.unicam.filiera_agricola.Piattaforma.HandlerPiattaforma;
 import cs.unicam.filiera_agricola.Utenti.HandlerUtenti;
 import cs.unicam.filiera_agricola.Utenti.Social;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
-import cs.unicam.filiera_agricola.Vendita.HandlerPagamenti;
+//import cs.unicam.filiera_agricola.Acquisto.HandlerPagamenti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Map;
@@ -20,10 +20,10 @@ public class FilieraAgricolaFacade {
     private final HandlerProdotti handlerProdotti;
     private final HandlerPiattaforma handlerPiattaforma;
     private final HandlerUtenti handlerUtenti;
-    private final HandlerPagamenti handlerPagamenti;
+    //private final HandlerPagamenti handlerPagamenti;
 
     private static FilieraAgricolaFacade instance = new FilieraAgricolaFacade(HandlerEventi.getInstance(), HandlerOrdine.getInstance(),
-            HandlerProdotti.getInstance(), HandlerPiattaforma.getInstance(), HandlerUtenti.getInstance(), HandlerPagamenti.getInstance());
+            HandlerProdotti.getInstance(), HandlerPiattaforma.getInstance(), HandlerUtenti.getInstance());
 
     public static FilieraAgricolaFacade getInstance() {
         return instance;
@@ -32,18 +32,18 @@ public class FilieraAgricolaFacade {
     @Autowired // per Dependency Injection
     public FilieraAgricolaFacade (HandlerEventi handlerEventi, HandlerOrdine handlerOrdine,
                                   HandlerProdotti handlerProdotti, HandlerPiattaforma handlerPiattaforma,
-                                  HandlerUtenti handlerUtenti, HandlerPagamenti handlerPagamenti) {
+                                  HandlerUtenti handlerUtenti) {
         this.handlerEventi = handlerEventi;
         this.handlerOrdine = handlerOrdine;
         this.handlerProdotti = handlerProdotti;
         this.handlerPiattaforma = handlerPiattaforma;
         this.handlerUtenti = handlerUtenti;
-        this.handlerPagamenti = handlerPagamenti;
+        //this.handlerPagamenti = handlerPagamenti;
     }
 
     // HandlerEventi
-    public void creaEvento(Evento evento) {
-        handlerEventi.creaEvento(evento);
+    public void creaEvento(int animatoreId, Evento evento) {
+        handlerEventi.creaEvento(animatoreId, evento);
     }
     public void getTuttiEventi() {
         handlerEventi.getTuttiEventi();
@@ -155,10 +155,11 @@ public class FilieraAgricolaFacade {
         handlerUtenti.condivisioneSuSocial(prodottoId, social, username, password);
     }
 
+    /*
     // HandlerPagamenti
     public void effettuaPagamento(String username, MetodoPagamento metodoDiPagamento) {
         handlerPagamenti.effettuaPagamento(username, metodoDiPagamento);
     }
-
+    */
 
 }

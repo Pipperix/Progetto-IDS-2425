@@ -13,9 +13,9 @@ public class AnimatoreService {
         this.filieraAgricolaFacade = filieraAgricolaFacade;
     }
 
-    public void creaEvento(Evento evento) {
+    public void creaEvento(int animatoreId, Evento evento) {
         // Usa il Facade per creare l'evento
-        filieraAgricolaFacade.creaEvento(evento);
+        filieraAgricolaFacade.creaEvento(animatoreId, evento);
     }
 
     public void modificaEvento(Evento evento) {

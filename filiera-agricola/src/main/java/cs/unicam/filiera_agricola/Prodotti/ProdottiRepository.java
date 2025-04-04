@@ -12,6 +12,6 @@ public interface ProdottiRepository extends JpaRepository<Prodotto, Integer> {
     List<Prodotto> findByDataScadenzaBefore(LocalDate now);
 
     // Rimuove tutti i prodotti con data di scadenza passata
-    void deleteByDataScadenzaBefore(LocalDate now);
+    //void deleteByDataScadenzaBefore(LocalDate now);
 
 }
