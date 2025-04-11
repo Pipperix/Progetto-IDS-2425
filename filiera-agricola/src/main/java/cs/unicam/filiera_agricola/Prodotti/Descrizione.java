@@ -1,9 +1,7 @@
 package cs.unicam.filiera_agricola.Prodotti;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -100,18 +98,18 @@ public class Descrizione {
         certificazione.setDescrizione(this);
     }
 
-//    public void rimuoviCertificazione(Certificazione certificazione) {
-//        certificazioni.remove(certificazione);
-//        certificazione.setDescrizione(null);
-//    }
+    public void rimuoviCertificazione(Certificazione certificazione) {
+        certificazioni.remove(certificazione);
+        certificazione.setDescrizione(null);
+    }
 
     public void aggiungiProcessoTrasformazione(ProcessoTrasformazione processo) {
         processiTrasformazione.add(processo);
         processo.setDescrizione(this);
     }
 
-//    public void rimuoviProcessoTrasformazione(ProcessoTrasformazione processo) {
-//        processiTrasformazione.remove(processo);
-//        processo.setDescrizione(null);
-//    }
+    public void rimuoviProcessoTrasformazione(ProcessoTrasformazione processo) {
+       processiTrasformazione.remove(processo);
+       processo.setDescrizione(null);
+    }
 }

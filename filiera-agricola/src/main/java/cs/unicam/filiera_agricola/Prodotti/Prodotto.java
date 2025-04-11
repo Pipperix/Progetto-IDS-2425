@@ -112,7 +112,7 @@ public class Prodotto {
 
     public void setVenditore(Venditore venditore) {
         this.venditore = venditore;
-        venditore.creaProdotto(this); // Imposta il riferimento bidirezionale
+        //venditore.creaProdotto(this); // Imposta il riferimento bidirezionale
     }
 
 }

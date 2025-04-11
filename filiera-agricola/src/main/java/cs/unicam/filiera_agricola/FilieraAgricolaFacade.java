@@ -82,8 +82,8 @@ public class FilieraAgricolaFacade {
     public void getProdotto(int id) {
         handlerProdotti.getProdotto(id);
     }
-    public void addProdotto(Prodotto prodotto) {
-        handlerProdotti.addProdotto(prodotto);
+    public void addProdotto(int venditoreId, Prodotto prodotto) {
+        handlerProdotti.addProdotto(venditoreId, prodotto);
     }
     public void deleteProdotto(int id) {
         handlerProdotti.deleteProdotto(id);

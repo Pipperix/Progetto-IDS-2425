@@ -9,6 +9,7 @@ public class Certificazione {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
+    private String dettagliCertificazione;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "descrizione_id")
@@ -17,8 +18,9 @@ public class Certificazione {
 
     public Certificazione() {}
 
-    public Certificazione(String nome) {
+    public Certificazione(String nome, String dettagliCertificazione) {
         this.nome = nome;
+        this.dettagliCertificazione = dettagliCertificazione;
     }
 
     public int getId() {
@@ -33,11 +35,19 @@ public class Certificazione {
         return descrizione;
     }
 
+    public String getDettagliCertificazione() {
+        return dettagliCertificazione;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
 
     public void setDescrizione(Descrizione descrizione) {
         this.descrizione = descrizione;
+    }
+
+    public void setDettagliCertificazione(String dettagliCertificazione) {
+        this.dettagliCertificazione = dettagliCertificazione;
     }
 }
