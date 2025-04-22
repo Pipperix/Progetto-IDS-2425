@@ -1,8 +1,6 @@
 package cs.unicam.filiera_agricola.Acquisto;
 
-import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
 import cs.unicam.filiera_agricola.Prodotti.MetodoPagamento;
-import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
@@ -23,10 +21,7 @@ public class CarrelloController {
 
     @Autowired
     private UtentiRepository utentiRepository;
-    @Autowired
-    private ProdottiRepository prodottiRepository;
-    @Autowired
-    private HandlerProdotti handlerProdotti;
+
 
     @GetMapping("/{acquirenteId}")
     public ResponseEntity<Object> getCarrello(@PathVariable int acquirenteId) {

@@ -1,20 +1,12 @@
 package cs.unicam.filiera_agricola.Utenti;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import cs.unicam.filiera_agricola.Eventi.EventiController;
 import cs.unicam.filiera_agricola.Eventi.Evento;
-import cs.unicam.filiera_agricola.Eventi.HandlerEventi;
-import cs.unicam.filiera_agricola.FilieraAgricolaFacade;
-import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
-import cs.unicam.filiera_agricola.Prodotti.Prodotto;
+import cs.unicam.filiera_agricola.Prodotti.ProdottiService;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,6 +34,8 @@ public class UtenteRegistrato implements Utente {
     @JsonIgnore
     private Set<Evento> eventiPrenotati = new HashSet<>();
 
+    //private EventiController eventiController = new EventiController();
+
     //private FilieraAgricolaFacade facade;
 
     // Costruttore vuoto richiesto da JPA
@@ -61,51 +55,63 @@ public class UtenteRegistrato implements Utente {
     }
 
     // Logout
-    public boolean disconnessione(FilieraAgricolaFacade facade) {
-        facade.disconnessione(this.getUsername());
-        return true;
+    public boolean disconnessione() {
+        // FilieraAgricolaFacade.getInstance().disconnessione(this.getUsername());
+        // return true;
+        return false; // Placeholder, implementare la logica di disconnessione
     }
 
     // Login
     @Override
     public boolean autenticazione() {
-        FilieraAgricolaFacade.getInstance().autenticazione(this.getUsername(), this.getPassword());
-        return true;
+        UtentiService utentiService = new UtentiService();
+        return utentiService.autenticazione(this.username, this.password);
     }
 
     // Signup (utente già registrato)
     @Override
     public boolean registrazione() {
-        FilieraAgricolaFacade.getInstance().registrazione(UtenteRegistrato.this);
-        return true;
+        UtentiService utentiService = new UtentiService();
+        return utentiService.registrazione(this);
     }
 
     // Metodo per la visualizzazione dei contenuti (prodotti) presenti nel sistema
     @Override
     public void visualizzaContenuti() {
-        FilieraAgricolaFacade.getInstance().getProdotti();
+        //FilieraAgricolaFacade.getInstance().visualizzaContenuti();
+        ProdottiService prodottiService = new ProdottiService();
+        prodottiService.getProdotti();
     }
 
     @Override
     public void visualizzaDescrizione(int id) {
-        FilieraAgricolaFacade.getInstance().getProdotto(id);
+        //FilieraAgricolaFacade.getInstance().getProdotto(id);
+        ProdottiService prodottiService = new ProdottiService();
+        prodottiService.getProdotto(id);
     }
 
     public void modificaDatiUtente(UtenteRegistrato nuovoUtente) {
-        FilieraAgricolaFacade.getInstance().modificaDatiUtente(this.getId(), nuovoUtente);
+        //FilieraAgricolaFacade.getInstance().modificaDatiUtente(this.getId(), nuovoUtente);
+        UtentiService utentiService = new UtentiService();
+        utentiService.modificaDatiUtente(this.getId(), nuovoUtente);
     }
 
     public void condivisioneSuSocial(int prodottoId, Social social) {
-        FilieraAgricolaFacade.getInstance().condivisioneSuSocial(prodottoId, social, username, password);
+        //FilieraAgricolaFacade.getInstance().condivisioneSuSocial(prodottoId, social, username, password);
+        UtentiService utentiService = new UtentiService();
+        utentiService.condivisioneSuSocial(prodottoId, social, this.username, this.password);
     }
 
     @Override
     public void visualizzaMappa() {
-        FilieraAgricolaFacade.getInstance().visualizzaMappa();
+        //FilieraAgricolaFacade.getInstance().visualizzaMappa();
+        UtentiService utentiService = new UtentiService();
+        utentiService.visualizzaMappa();
     }
 
     public void prenotaEvento(int eventoId, String username) {
-        FilieraAgricolaFacade.getInstance().prenotaEvento(eventoId, username);
+        EventiController eventoController = new EventiController();
+        eventoController.prenotaEvento(eventoId, username);
     }
 
     public boolean isAutorizzato() {

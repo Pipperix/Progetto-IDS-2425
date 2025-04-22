@@ -1,12 +1,10 @@
 package cs.unicam.filiera_agricola.Acquisto;
 
 import cs.unicam.filiera_agricola.Prodotti.*;
-import cs.unicam.filiera_agricola.Prodotti.Ordine;
 import cs.unicam.filiera_agricola.Utenti.*;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
-import java.util.*;
 
 @Entity
 public class Acquirente extends UtenteRegistrato {
@@ -96,11 +94,8 @@ public class Acquirente extends UtenteRegistrato {
         carrello.clear();
     }
 
-    public Set<Carrello> getCarrello() {return carrello;}
-
-    public Set<Ordine> getOrdini() {return ordini;}
-
-    public MetodoPagamento getMetodoPagamento() {return metodoPagamento;}
-
      */
+    public MetodoPagamento getMetodoPagamento() {
+        return metodoPagamento;
+    }
 }

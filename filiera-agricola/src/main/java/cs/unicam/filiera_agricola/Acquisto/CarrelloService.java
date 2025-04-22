@@ -3,18 +3,12 @@ package cs.unicam.filiera_agricola.Acquisto;
 import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
-import cs.unicam.filiera_agricola.Utenti.Utente;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class CarrelloService {
@@ -33,11 +27,13 @@ public class CarrelloService {
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
         if (acquirente.getRuolo() != Ruolo.ACQUIRENTE)
             throw new RuntimeException("L'id fornito non corrisponde all'id di un acquirente");
+        if (carrelloRepository.findByAcquirenteId(acquirenteId) == null)
+            throw new RuntimeException("Il carrello è vuoto. Inizia gli acquisti");
         Carrello carrello = carrelloRepository.findByAcquirenteId(acquirenteId);
         return carrello.getProdotti();
     }
 
-    // aggiungere anche la quantità di quanti prodotti si aggiungono?
+    // TODO: aggiungere anche la quantità di quanti prodotti si aggiungono?
     public void aggiungiProdotto(int acquirenteId, int prodottoId) {
         UtenteRegistrato utente = utentiRepository.findById(acquirenteId)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));

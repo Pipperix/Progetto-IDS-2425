@@ -1,16 +1,12 @@
 package cs.unicam.filiera_agricola.Piattaforma;
 
-import cs.unicam.filiera_agricola.FilieraAgricolaFacade;
-import cs.unicam.filiera_agricola.Prodotti.HandlerProdotti;
+import cs.unicam.filiera_agricola.Prodotti.ProdottiController;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
-
-import java.time.LocalDate;
 
 @Entity
 public class Curatore extends UtenteRegistrato {
@@ -23,7 +19,7 @@ public class Curatore extends UtenteRegistrato {
     }
 
     @Transactional // garantisce che l'approvazione sia salvata correttamente
-    public void approvaContenuto(Prodotto prodotto, FilieraAgricolaFacade facade) {
-        facade.approvaContenuto(prodotto.getId());
+    public void approvaContenuto(Prodotto prodotto, ProdottiController prodottiController) {
+        prodottiController.approvaContenuto(prodotto.getId());
     }
 }
