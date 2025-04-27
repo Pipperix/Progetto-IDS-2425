@@ -98,6 +98,18 @@ public class EventiController {
         }
     }
 
+
+    @GetMapping(value = "/{animatoreId}")
+    public ResponseEntity<Object> getEventiAnimatore(@PathVariable int animatoreId) {
+        try {
+            List<Evento> eventi = eventiService.getEventiAnimatore(animatoreId);
+            return ResponseEntity.ok(eventi);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
     @PostConstruct
     public void init() {
         if (eventoRepository.count() == 0) { // Evita duplicati

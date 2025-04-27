@@ -1,7 +1,9 @@
 package cs.unicam.filiera_agricola.Vendita;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import cs.unicam.filiera_agricola.Prodotti.Certificazione;
 import cs.unicam.filiera_agricola.Prodotti.PacchettoDiProdotti;
+import cs.unicam.filiera_agricola.Prodotti.ProdottiController;
 import jakarta.persistence.*;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import java.util.HashSet;
@@ -21,29 +23,17 @@ public class Distributore extends Venditore{
         super(username, nomeUtente, cognome, email, password, luogo, partitaIva);
     }
 
-    public PacchettoDiProdotti creaPacchettoDiProdotti(Set<Prodotto> prodotti){
-        PacchettoDiProdotti pacchetto = new PacchettoDiProdotti("nome");
-        pacchettiCreati.add(pacchetto);
-        return pacchetto;
+    public void addPacchetto(ProdottiController prodotti) {
+        prodotti.addPacchetto(this.getId(), new PacchettoDiProdotti());
     }
 
-    public void eliminaPacchetto(PacchettoDiProdotti pacchetto){
-        pacchettiCreati.remove(pacchetto);
+    public void updatePacchetto(ProdottiController prodotti, int id, PacchettoDiProdotti pacchettoModificato) {
+        prodotti.updatePacchetto(id, pacchettoModificato);
     }
 
-    public void modificaNome(PacchettoDiProdotti pacchetto, String nome) {
-        pacchetto.setNome(nome);
+    public void deletePacchetto(ProdottiController prodotti, int id) {
+        prodotti.deletePacchetto(id);
     }
-
-    /*
-    public void modificaDescrizione(PacchettoDiProdotti pacchetto, String descrizione){
-        pacchetto.setDescrizione(descrizione);
-    }
-    public void modificaPrezzo(PacchettoDiProdotti pacchetto, double prezzo){
-        pacchetto.setPrezzo(prezzo);
-    }
-
-     */
 
     public Set<PacchettoDiProdotti> getPacchettiCreati() {
         return pacchettiCreati;

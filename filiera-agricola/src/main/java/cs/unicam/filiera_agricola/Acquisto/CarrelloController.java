@@ -36,17 +36,12 @@ public class CarrelloController {
 
     @PostMapping("/{acquirenteId}/aggiungi")
     public ResponseEntity<String> aggiungiProdotto(@PathVariable int acquirenteId,
-                                                   @RequestParam int prodottoId) {
-        /*
-        Prodotto prodotto = handlerProdotti.getProdotto(prodottoId);
-        if (!prodotto.getDescrizione().isApprovato())
-            return ResponseEntity.badRequest().body("Il prodotto non è stato ancora approvato. " +
-                    "Attendi la sua approvazione prima di poterlo aggiungere al carrello.");
-         */
+                                                   @RequestParam int prodottoId,
+                                                   @RequestParam(defaultValue = "1") int quantita) {
         try {
-            carrelloService.aggiungiProdotto(acquirenteId, prodottoId);
-            return ResponseEntity.ok("Prodotto " + prodottoId + " aggiunto con successo al carrello! " +
-                    "Può proseguire con gli acquisti.");
+            carrelloService.aggiungiProdotto(acquirenteId, prodottoId, quantita);
+            return ResponseEntity.ok("Aggiunti " + quantita + " pezzi del prodotto con id: " + prodottoId +
+                    " al carrello! Può proseguire con gli acquisti.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -84,16 +79,14 @@ public class CarrelloController {
         }
     }
 
-    // TODO: chiama metodo del PagamentoService
     @PostMapping("/effettuaPagamento")
     public ResponseEntity<Object> effettuaPagamento(@RequestParam String username, @RequestParam MetodoPagamento metodoDiPagamento) {
-        // Trova l'acquirente
-        Optional<UtenteRegistrato> acquirente = utentiRepository.findByUsername(username);
-        if (acquirente.isEmpty() || acquirente.get().getRuolo() != Ruolo.ACQUIRENTE) {
-            return ResponseEntity.badRequest().body("Acquirente non trovato o lo username non corrisponde ad un acquirente.");
+        try {
+            carrelloService.effettuaPagamento(username, metodoDiPagamento);
+            return ResponseEntity.ok("Pagamento effettuato con successo con " + metodoDiPagamento);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        // Ritorna una risposta positiva
-        return ResponseEntity.ok("Pagamento effettuato con successo con " + metodoDiPagamento);
     }
 
 }

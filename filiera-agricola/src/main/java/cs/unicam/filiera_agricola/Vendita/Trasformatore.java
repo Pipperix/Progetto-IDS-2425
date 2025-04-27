@@ -1,11 +1,8 @@
 package cs.unicam.filiera_agricola.Vendita;
 
 import cs.unicam.filiera_agricola.Prodotti.ProcessoTrasformazione;
-import cs.unicam.filiera_agricola.Prodotti.Prodotto;
+import cs.unicam.filiera_agricola.Prodotti.ProdottiController;
 import cs.unicam.filiera_agricola.Prodotti.Certificazione;
-
-import java.time.LocalDate;
-import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,30 +14,19 @@ public class Trasformatore extends Venditore{
         super(username, nomeUtente, cognome, email, password, luogo, partitaIva);
     }
 
-    public void aggiungiProcessoTrasformazione(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {
-        prodottoTrasformato.setProcessoTrasformazione(processoTrasformazione);
-        ///prodottoTrasformato.getProcessiTrasformazione().add(processoTrasformazione);
+    public void aggiungiProcessoTrasformazione(ProdottiController prodotti, int id, ProcessoTrasformazione processo) {
+        prodotti.aggiungiProcessoTrasformazione(id, processo);
     }
 
-    public void rimuoviProcessoTrasformazione(Prodotto prodottoTrasformato, ProcessoTrasformazione processoTrasformazione) {
-        prodottoTrasformato.getDescrizione().getProcessiTrasformazione().remove(processoTrasformazione);
+    public void eliminaProcessoTrasformazione(ProdottiController prodotti, int id, int processoId) {
+        prodotti.eliminaProcessoTrasformazione(id, processoId);
     }
 
-    public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione) {
-        if (prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().aggiungiCertificazione(certificazione);
-        }
+    public void aggiungiCertificazione(ProdottiController prodotti, int id, Certificazione certificazione) {
+        prodotti.aggiungiCertificazione(id, certificazione);
     }
 
-    public void rimuoviCertificazione(Prodotto prodotto, Certificazione certificazione) {
-        if (prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().getCertificazioni().remove(certificazione);
-        }
-    }
-
-    public Prodotto creaProdottoTrasformato(String nome, double prezzo, LocalDate dataScadenza) {
-        Prodotto prodottoTrasformato = new Prodotto(nome, prezzo, null);
-        this.getProdottiCreati().add(prodottoTrasformato);
-        return prodottoTrasformato;
+    public void eliminaCertificazione(ProdottiController prodotti, int id, int certificazioneId) {
+        prodotti.eliminaCertificazione(id, certificazioneId);
     }
 }

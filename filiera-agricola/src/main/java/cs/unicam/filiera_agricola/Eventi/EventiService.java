@@ -4,9 +4,7 @@ import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
@@ -114,6 +112,17 @@ public class EventiService {
         Evento evento = eventoRepository.findById(eventoId)
                 .orElseThrow(() -> new RuntimeException("Evento non trovato"));
         return evento.getUtentiPrenotati();
+    }
+
+
+    public List<Evento> getEventiAnimatore(int animatoreId) {
+        UtenteRegistrato utente = utentiRepository.findById(animatoreId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        if (utente.getRuolo() != Ruolo.ANIMATORE) {
+            throw new RuntimeException("L'id fornito non corrisponde all'id di un animatore");
+        }
+        Animatore animatore = (Animatore) utente;
+        return eventoRepository.findByAnimatore(animatore);
     }
 }
 

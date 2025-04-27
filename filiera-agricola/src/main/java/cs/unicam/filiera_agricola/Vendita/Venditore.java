@@ -1,12 +1,11 @@
 package cs.unicam.filiera_agricola.Vendita;
 
+import cs.unicam.filiera_agricola.Prodotti.ProdottiController;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,44 +32,20 @@ public class Venditore extends UtenteRegistrato {
         this.partitaIva = partitaIva;
     }
 
-    public void creaProdotto(String nome, double prezzo, LocalDate dataScadenza) {
-        Prodotto nuovoProdotto = new Prodotto(nome, prezzo, dataScadenza);
-        nuovoProdotto.setVenditore(this);  // Imposta il venditore del prodotto
-        prodottiCreati.add(nuovoProdotto);
+    public void creaProdotto(ProdottiController prodotti) {
+        prodotti.addProdotto(this.getId(), new Prodotto());
     }
 
-    public void creaProdotto (Prodotto prodotto) {
-        prodotto.setVenditore(this);
-        prodottiCreati.add(prodotto);
+    public void eliminaProdotto(ProdottiController prodotti, int id) {
+        prodotti.deleteProdotto(id);
     }
 
-    public void eliminaProdotto(Prodotto prodotto){
-        prodottiCreati.remove(prodotto);
-        prodotto.setVenditore(null);
+    public void modificaProdotto(ProdottiController prodotti, int id, Prodotto prodottoModificato) {
+        prodotti.updateProdotto(id, prodottoModificato);
     }
 
-    public void modificaNome(Prodotto prodotto, String nome){
-        if (prodottiCreati.contains(prodotto)) {
-            prodotto.setNome(nome);
-        }
-    }
-
-    public void modificaDescrizione(Prodotto prodotto, String dettaglio){
-        if (prodottiCreati.contains(prodotto) && prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().setDettaglio(dettaglio);
-        }
-    }
-
-    public void modificaPrezzo(Prodotto prodotto, double prezzo){
-        if (prodottiCreati.contains(prodotto)) {
-            prodotto.setPrezzo(prezzo);
-        }
-    }
-
-    public void modificaQuantita(Prodotto prodotto, int quantita){
-        if (prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().setQuantita(quantita);
-        }
+    public void modificaQuantita(ProdottiController prodotti, int id, int quantita) {
+        prodotti.modificaQuantita(id, quantita);
     }
 
     public void setId(int id) {

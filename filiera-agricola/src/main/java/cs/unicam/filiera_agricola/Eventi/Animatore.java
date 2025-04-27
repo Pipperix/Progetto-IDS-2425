@@ -27,4 +27,20 @@ public class Animatore extends UtenteRegistrato {
     public List<Evento> getEventiCreati() {
         return eventiCreati;
     }
+
+    public void creaEvento(EventiController eventi) {
+        eventi.creaEvento(this.getId(), new Evento());
+    }
+
+    public void modificaEvento(EventiController eventi, int id, Evento eventoModificato) {
+        eventi.modificaEvento(id, eventoModificato);
+    }
+
+    public void eliminaEvento(EventiController eventi, int id) {
+        eventi.eliminaEvento(id);
+    }
+
+    public void getPrenotati(EventiController eventi, int id) {
+        eventi.getPrenotati(id);
+    }
 }

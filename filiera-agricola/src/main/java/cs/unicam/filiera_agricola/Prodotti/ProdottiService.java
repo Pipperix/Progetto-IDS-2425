@@ -3,11 +3,10 @@ package cs.unicam.filiera_agricola.Prodotti;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Utenti.UtentiRepository;
+import cs.unicam.filiera_agricola.Vendita.Distributore;
 import cs.unicam.filiera_agricola.Vendita.Venditore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
     @Service
@@ -41,11 +40,6 @@ import java.util.List;
     // Ritorna tutti i prodotti
     public List<Prodotto> getProdotti() {
         return prodottiRepository.findAll();
-                /*
-                .stream()
-                .filter(prodotto -> prodotto.getDescrizione().isApprovato())
-                .toList();
-                 */
     }
 
     public Prodotto getProdotto(int id) {
@@ -56,19 +50,10 @@ import java.util.List;
     }
 
     public void addProdotto(int venditoreId, Prodotto prodotto) {
-    UtenteRegistrato utente = utentiRepository.findById(venditoreId)
-            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        Venditore venditore = findVenditore(venditoreId);
+        prodotto.setVenditore(venditore); // Imposto il venditore sul prodotto
 
-    // Verifico se l'utente è effettivamente un Animatore
-    if (utente.getRuolo() != Ruolo.VENDITORE && utente.getRuolo() != Ruolo.PRODUTTORE &&
-            utente.getRuolo() != Ruolo.TRASFORMATORE && utente.getRuolo() != Ruolo.DISTRIBUTORE) {
-        throw new RuntimeException("L'id fornito non corrisponde all'id di un venditore");
-    }
-    // Se l'utente è un Venditore, lo castiamo e associamo all'evento
-    Venditore venditore = (Venditore) utente;
-    prodotto.setVenditore(venditore); // Imposto il venditore sul prodotto
-
-    prodottiRepository.save(prodotto);
+        prodottiRepository.save(prodotto);
 }
 
     // Elimina un prodotto
@@ -123,14 +108,29 @@ import java.util.List;
             throw new RuntimeException("Pacchetto non trovato");
     }
 
-    // TODO: aggiungere controllo che ti dice se il prodotto che stai tentando di aggiungere non è
-    //  disponibile nel marketplace?
-    // Aggiunge un pacchetto di prodotti
-    public void addPacchetto(@RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
-        if (!pacchettiDiProdottiRepository.existsById(pacchettoDiProdotti.getId())) {
-            pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
-        } else
+   // Aggiunge un pacchetto di prodotti
+    public void addPacchetto(int distributoreId, PacchettoDiProdotti pacchettoDiProdotti) {
+        UtenteRegistrato utente = utentiRepository.findById(distributoreId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+
+        // Verifico se l'utente è effettivamente un Distributore
+        if (utente.getRuolo() != Ruolo.DISTRIBUTORE) {
+            throw new RuntimeException("L'id fornito non corrisponde all'id di un distributore");
+        }
+        // Se l'utente è un Distributore, lo castiamo e associamo all'evento
+        Distributore distributore = (Distributore) utente;
+
+        if (pacchettiDiProdottiRepository.existsById(pacchettoDiProdotti.getId())) {
             throw new RuntimeException("Pacchetto già esistente");
+        }
+
+        // Controlla che ogni prodotto esista nel marketplace
+        for (Prodotto prodotto : pacchettoDiProdotti.getProdotti()) {
+            if (!prodottiRepository.existsById(prodotto.getId())) {
+                throw new RuntimeException("Prodotto con ID " + prodotto.getId() + " non esiste nel marketplace");
+            }
+        }
+        pacchettiDiProdottiRepository.save(pacchettoDiProdotti);
     }
 
     // Elimina un pacchetto di prodotti
@@ -170,8 +170,6 @@ import java.util.List;
         prodottiRepository.save(prodotto);
     }
 
-    //TODO: verificare prima che il prodotto è approvato?
-    @PostMapping(value = "/prodotti/{id}/aggiungiCertificazione", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void aggiungiCertificazione(int id, Certificazione certificazione) {
         Prodotto prodotto = prodottiRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prodotto non trovato"));
@@ -188,7 +186,6 @@ import java.util.List;
         prodottiRepository.save(prodotto);
     }
 
-    //TODO: verificare prima che il prodotto è approvato?
     public void aggiungiProcessoTrasformazione(int id, ProcessoTrasformazione processoTrasformazione) {
         Prodotto prodotto = prodottiRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prodotto non trovato"));
@@ -205,4 +202,23 @@ import java.util.List;
         prodottiRepository.save(prodotto);
     }
 
+    public List<Prodotto> getProdottiVenditore (int venditoreId) {
+        Venditore venditore = findVenditore(venditoreId);
+        return prodottiRepository.findByVenditore(venditore);
+    }
+
+    private Venditore findVenditore(int venditoreId) {
+        UtenteRegistrato utente = utentiRepository.findById(venditoreId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        if (utente.getRuolo() != Ruolo.VENDITORE && utente.getRuolo() != Ruolo.PRODUTTORE &&
+                utente.getRuolo() != Ruolo.TRASFORMATORE && utente.getRuolo() != Ruolo.DISTRIBUTORE) {
+            throw new RuntimeException("L'id fornito non corrisponde all'id di un venditore");
+        }
+        Venditore venditore = (Venditore) utente;
+        if (!venditore.isAutorizzato()) {
+            throw new RuntimeException("L'account del venditore non è stato ancora autorizzato. " +
+                    "Attendi l'autorizzazione del gestore.");
+        }
+        return venditore;
+    }
 }

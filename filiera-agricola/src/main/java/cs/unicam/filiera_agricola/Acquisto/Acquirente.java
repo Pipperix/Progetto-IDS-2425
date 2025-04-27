@@ -6,22 +6,10 @@ import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Acquirente extends UtenteRegistrato {
-/*
-    @ElementCollection
-    private Map<Prodotto, Integer> carrello = new HashMap<>();
-    @ElementCollection
-    private Set<Ordine> ordini = new LinkedHashSet<>();
-
-
-    @OneToMany(mappedBy = "acquirente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Carrello> carrello = new HashSet<>();
-
-    @OneToMany(mappedBy = "acquirente", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Ordine> ordini = new LinkedHashSet<>();
-
- */
 
     @Enumerated(EnumType.STRING)
     private MetodoPagamento metodoPagamento;
@@ -33,68 +21,34 @@ public class Acquirente extends UtenteRegistrato {
         super(username, nome, cognome, email, password, luogo, Ruolo.ACQUIRENTE);
     }
 
-    /*
-    public void aggiungiProdotto(Prodotto prodotto, int quantità){
-        carrello.put(prodotto, carrello.getOrDefault(prodotto, 0) + quantità);
+    public void getCarrello(CarrelloController carrello) {
+        carrello.getCarrello(this.getId());
     }
 
-    // Aggiungi prodotto al carrello
-    public void aggiungiProdotto(Prodotto prodotto, int quantità) {
-        Carrello item = new Carrello(this, prodotto, quantità);
-        carrello.add(item);  // Aggiungi il prodotto con la quantità al carrello
+    public void aggiungiProdotto(CarrelloController carrello, int prodottoId, int quantita) {
+        carrello.aggiungiProdotto(this.getId(), prodottoId, quantita);
     }
 
-
-    public void rimuoviProdotto(Prodotto prodotto, int quantità){
-        if (carrello.containsKey(prodotto)) {
-            int nuovaQuantita = carrello.get(prodotto) - quantità;
-            if (nuovaQuantita > 0) {
-                carrello.put(prodotto, nuovaQuantita);
-            } else {
-                carrello.remove(prodotto);
-            }
-        }
+    public void rimuoviProdotto(CarrelloController carrello, int prodottoId) {
+        carrello.rimuoviProdotto(this.getId(), prodottoId);
     }
 
-    // Rimuovi prodotto dal carrello
-    public void rimuoviProdotto(Prodotto prodotto, int quantita) {
-        for (Carrello item : carrello) {
-            if (item.getProdotto().equals(prodotto)) {
-                int nuovaQuantita = item.getQuantita() - quantita;
-                if (nuovaQuantita > 0) {
-                    item.setQuantita(nuovaQuantita);  // Aggiorna la quantità
-                } else {
-                    carrello.remove(item);  // Rimuovi l'item se la quantità è 0 o inferiore
-                }
-                break;
-            }
-        }
+    public void svuotaCarrello(CarrelloController carrello) {
+        carrello.svuotaCarrello(this.getId());
     }
 
-    public void selezionaPagamento(MetodoPagamento metodo){
-        this.metodoPagamento = metodo;
+    public void calcolaTotale(CarrelloController carrello) {
+        carrello.calcolaTotale(this.getId());
     }
 
-
-    public void confermaAcquisto() {
-        HandlerOrdine handlerOrdine = new HandlerOrdine();
-        // Crea la mappa dei prodotti nel carrello
-        Map<Prodotto, Integer> prodottiNelCarrello = new HashMap<>();
-        for (Carrello item : carrello) {
-            prodottiNelCarrello.put(item.getProdotto(), item.getQuantita());
-            // Effettua il pagamento
-            HandlerPagamenti.getInstance().effettuaPagamento(this.getUsername(), metodoPagamento);
-            // Creazione nuovo ordine con i prodotti nel carrello
-            handlerOrdine.creaOrdine(this.getId(), prodottiNelCarrello, metodoPagamento);
-            this.svuotaCarrello();
-        }
+    public void effettuaPagamento(CarrelloController carrello, MetodoPagamento metodoPagamento) {
+        carrello.effettuaPagamento(this.getUsername(), metodoPagamento);
     }
 
-    public void svuotaCarrello() {
-        carrello.clear();
+    public void setMetodoPagamento(MetodoPagamento metodoPagamento) {
+        this.metodoPagamento = metodoPagamento;
     }
 
-     */
     public MetodoPagamento getMetodoPagamento() {
         return metodoPagamento;
     }

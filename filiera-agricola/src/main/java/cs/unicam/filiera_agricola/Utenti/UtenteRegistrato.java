@@ -3,6 +3,7 @@ package cs.unicam.filiera_agricola.Utenti;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cs.unicam.filiera_agricola.Eventi.EventiController;
 import cs.unicam.filiera_agricola.Eventi.Evento;
+import cs.unicam.filiera_agricola.Prodotti.ProdottiController;
 import cs.unicam.filiera_agricola.Prodotti.ProdottiService;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
@@ -34,9 +35,6 @@ public class UtenteRegistrato implements Utente {
     @JsonIgnore
     private Set<Evento> eventiPrenotati = new HashSet<>();
 
-    //private EventiController eventiController = new EventiController();
-
-    //private FilieraAgricolaFacade facade;
 
     // Costruttore vuoto richiesto da JPA
     public UtenteRegistrato() {}
@@ -55,32 +53,29 @@ public class UtenteRegistrato implements Utente {
     }
 
     // Logout
-    public boolean disconnessione() {
-        // FilieraAgricolaFacade.getInstance().disconnessione(this.getUsername());
-        // return true;
-        return false; // Placeholder, implementare la logica di disconnessione
+    public void disconnessione(UtentiController utenti) {
+        utenti.disconnessione(this.username);
     }
 
     // Login
     @Override
     public boolean autenticazione() {
-        UtentiService utentiService = new UtentiService();
-        return utentiService.autenticazione(this.username, this.password);
+        UtentiService utenti = new UtentiService();
+        return utenti.autenticazione(this.username, this.password);
     }
 
     // Signup (utente già registrato)
     @Override
     public boolean registrazione() {
-        UtentiService utentiService = new UtentiService();
-        return utentiService.registrazione(this);
+        UtentiService utenti = new UtentiService();
+        return utenti.registrazione(this);
     }
 
     // Metodo per la visualizzazione dei contenuti (prodotti) presenti nel sistema
     @Override
     public void visualizzaContenuti() {
-        //FilieraAgricolaFacade.getInstance().visualizzaContenuti();
-        ProdottiService prodottiService = new ProdottiService();
-        prodottiService.getProdotti();
+        ProdottiController prodotti = new ProdottiController();
+        prodotti.getProdotti();
     }
 
     @Override
@@ -90,36 +85,46 @@ public class UtenteRegistrato implements Utente {
         prodottiService.getProdotto(id);
     }
 
-    public void modificaDatiUtente(UtenteRegistrato nuovoUtente) {
-        //FilieraAgricolaFacade.getInstance().modificaDatiUtente(this.getId(), nuovoUtente);
-        UtentiService utentiService = new UtentiService();
-        utentiService.modificaDatiUtente(this.getId(), nuovoUtente);
+    public void modificaDatiUtente(UtentiController utenti, UtenteRegistrato nuovoUtente) {
+        utenti.modificaDatiUtente(this.getId(), nuovoUtente);
     }
 
-    public void condivisioneSuSocial(int prodottoId, Social social) {
-        //FilieraAgricolaFacade.getInstance().condivisioneSuSocial(prodottoId, social, username, password);
-        UtentiService utentiService = new UtentiService();
-        utentiService.condivisioneSuSocial(prodottoId, social, this.username, this.password);
+    public void condivisioneSuSocial(UtentiController utenti, int prodottoId, Social social) {
+        utenti.condivisioneSuSocial(prodottoId, social, this.username, this.password);
     }
 
     @Override
     public void visualizzaMappa() {
-        //FilieraAgricolaFacade.getInstance().visualizzaMappa();
-        UtentiService utentiService = new UtentiService();
-        utentiService.visualizzaMappa();
+        UtentiController utenti = new UtentiController();
+        utenti.visualizzaMappa();
     }
 
-    public void prenotaEvento(int eventoId, String username) {
-        EventiController eventoController = new EventiController();
-        eventoController.prenotaEvento(eventoId, username);
+    public void getTuttiEventi(EventiController eventi) {
+        eventi.getTuttiEventi();
     }
 
-    public boolean isAutorizzato() {
-        return autorizzato;
+    public void getEventoById(EventiController eventi, int id) {
+        eventi.getEventoById(id);
     }
 
-    public void setAutorizzato(boolean autorizzato) {
-        this.autorizzato = autorizzato;
+    public void getEventiAnimatore(EventiController eventi, int id) {
+        eventi.getEventiAnimatore(id);
+    }
+
+    public void prenotaEvento(EventiController eventi, int eventoId) {
+        eventi.prenotaEvento(eventoId, this.getUsername());
+    }
+
+    public void getPacchetti(ProdottiController prodotti) {
+        prodotti.getPacchetti();
+    }
+
+    public void getPacchetto(ProdottiController prodotti, int id) {
+        prodotti.getPacchetto(id);
+    }
+
+    public void getProdottiVenditore(ProdottiController prodotti, int id) {
+        prodotti.getProdottiVenditore(id);
     }
 
     // Getters
@@ -132,6 +137,9 @@ public class UtenteRegistrato implements Utente {
     public String getPassword() { return password; }
     public Ruolo getRuolo() { return ruolo; }
     public Set<Evento> getEventiPrenotati() { return eventiPrenotati; }
+    public boolean isAutorizzato() {
+        return autorizzato;
+    }
 
     // Setters
     public void setUsername(String username) { this.username = username; }
@@ -142,5 +150,8 @@ public class UtenteRegistrato implements Utente {
     public void setPassword(String password) { this.password = password; }
     public void setRuolo(Ruolo ruolo) { this.ruolo = ruolo; }
     public void setEventiPrenotati(Set<Evento> eventiPrenotati) { this.eventiPrenotati = eventiPrenotati; }
+    public void setAutorizzato(boolean autorizzato) {
+        this.autorizzato = autorizzato;
+    }
 
 }

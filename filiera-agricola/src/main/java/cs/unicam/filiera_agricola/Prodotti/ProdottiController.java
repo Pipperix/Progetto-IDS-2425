@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -145,13 +146,11 @@ public class ProdottiController {
         }
     }
 
-    // TODO: aggiungere controllo che ti dice se il prodotto che stai tentando di aggiungere non è
-    //  disponibile nel marketplace?
     // Aggiunge un pacchetto di prodotti
-    @PostMapping(value = "/pacchetti/crea", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> addPacchetto(@RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
+    @PostMapping(value = "/pacchetti/{distributoreId}/crea", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> addPacchetto(@PathVariable int distributoreId, @RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
         try {
-            prodottiService.addPacchetto(pacchettoDiProdotti);
+            prodottiService.addPacchetto(distributoreId, pacchettoDiProdotti);
             return ResponseEntity.ok("Pacchetto aggiunto con successo.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -171,9 +170,9 @@ public class ProdottiController {
 
     // Aggiorna un pacchetto di prodotti
     @PutMapping(value = "/pacchetti/{id}/modifica", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> updatePacchetto(@PathVariable int id, @RequestBody PacchettoDiProdotti pacchettoDiProdotti) {
+    public ResponseEntity<Object> updatePacchetto(@PathVariable int id, @RequestBody PacchettoDiProdotti pacchettoModificato) {
         try {
-            prodottiService.updatePacchetto(id, pacchettoDiProdotti);
+            prodottiService.updatePacchetto(id, pacchettoModificato);
             return ResponseEntity.ok("Pacchetto aggiornato con successo.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -205,7 +204,6 @@ public class ProdottiController {
         }
     }
 
-    //TODO: verificare prima che il prodotto è approvato?
     @PostMapping(value = "/prodotti/{id}/aggiungiCertificazione", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> aggiungiCertificazione(@PathVariable int id, @RequestBody Certificazione certificazione) {
         try {
@@ -216,7 +214,6 @@ public class ProdottiController {
         }
     }
 
-    // TODO: mettere certificazioneId come @RequestParam invece che @PathVariable?
     @DeleteMapping(value = "/prodotti/{id}/eliminaCertificazione/{certificazioneId}")
     public ResponseEntity<String> eliminaCertificazione(@PathVariable int id, @PathVariable int certificazioneId) {
         try {
@@ -227,7 +224,6 @@ public class ProdottiController {
         }
     }
 
-    //TODO: verificare prima che il prodotto è approvato?
     @PostMapping(value = "/prodotti/{id}/aggiungiProcesso", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> aggiungiProcessoTrasformazione(@PathVariable int id, @RequestBody ProcessoTrasformazione processoTrasformazione) {
         try {
@@ -238,12 +234,21 @@ public class ProdottiController {
         }
     }
 
-    // TODO: mettere il processoId come @RequestParam invece che @PathVariable?
     @DeleteMapping(value = "/prodotti/{id}/eliminaProcesso/{processoId}")
     public ResponseEntity<String> eliminaProcessoTrasformazione(@PathVariable int id, @PathVariable int processoId) {
         try {
             prodottiService.eliminaProcessoTrasformazione(id, processoId);
             return ResponseEntity.ok("Processo di trasformazione rimosso con successo.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/{venditoreId}")
+    public ResponseEntity<Object> getProdottiVenditore(@PathVariable int venditoreId) {
+        try {
+            List<Prodotto> prodottiVenditore = prodottiService.getProdottiVenditore(venditoreId);
+            return ResponseEntity.ok(prodottiVenditore);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

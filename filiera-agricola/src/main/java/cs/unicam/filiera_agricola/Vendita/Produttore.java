@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Vendita;
 
+import cs.unicam.filiera_agricola.Prodotti.ProdottiController;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Prodotti.Certificazione;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -14,13 +15,6 @@ public class Produttore extends Venditore {
     @Id
     private int id;
 
-    /*
-    @OneToMany(mappedBy = "descrizione", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private Set<Certificazione> certificazioniCreate = new HashSet<>();
-
-     */
-
     public Produttore() {
     }
 
@@ -29,29 +23,12 @@ public class Produttore extends Venditore {
         super(username, nomeUtente, cognome, email, password, luogo, partitaIva);
     }
 
-    public void aggiungiCertificazione(Prodotto prodotto, Certificazione certificazione) {
-        if (prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().aggiungiCertificazione(certificazione);
-            //certificazioniCreate.add(certificazione);
-        }
+    public void aggiungiCertificazione(ProdottiController prodotti, int id, Certificazione certificazione) {
+        prodotti.aggiungiCertificazione(id, certificazione);
     }
 
-    public void modificaCertificazione(Prodotto prodotto, Certificazione nuovaCertificazione) {
-        if (prodotto.getDescrizione() != null) {
-            for (Certificazione cert : prodotto.getDescrizione().getCertificazioni()) {
-                if (cert.getId() == nuovaCertificazione.getId()) {
-                    cert.setNome(nuovaCertificazione.getNome());
-                    break;
-                }
-            }
-        }
-    }
-
-    public void rimuoviCertificazione(Prodotto prodotto, Certificazione certificazione) {
-        if (prodotto.getDescrizione() != null) {
-            prodotto.getDescrizione().getCertificazioni().remove(certificazione);
-            //certificazioniCreate.remove(certificazione);
-        }
+    public void eliminaCertificazione(ProdottiController prodotti, int id, int certificazioneId) {
+        prodotti.eliminaCertificazione(id, certificazioneId);
     }
 
     public void setId(int id) {

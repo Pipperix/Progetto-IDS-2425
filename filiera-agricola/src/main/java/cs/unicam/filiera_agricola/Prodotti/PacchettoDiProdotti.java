@@ -22,7 +22,6 @@ public class PacchettoDiProdotti {
             inverseJoinColumns = @JoinColumn(name = "prodotto_id") // Colonna per Prodotto
     )
     @JsonIgnoreProperties("pacchetti")
-    //alternativa: @JsonIgnore o niente
     private Set<Prodotto> prodotti = new HashSet<>();
 
     @ManyToOne

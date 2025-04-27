@@ -39,23 +39,30 @@ import java.util.Optional;
             // Impostare autorizzato a false automaticamente
             nuovoUtente.setAutorizzato(false);
 
-            // Se il ruolo è VENDITORE o sotto-ruolo (come Trasformatore), ottieni la partita IVA
-            String partitaIva = null;
             if (nuovoUtente.getRuolo() == Ruolo.PRODUTTORE || nuovoUtente.getRuolo() == Ruolo.TRASFORMATORE ||
                     nuovoUtente.getRuolo() == Ruolo.DISTRIBUTORE) {
-                partitaIva = ((Venditore) nuovoUtente).getPartitaIva(); // Cast per accedere alla partitaIva
+
+                VenditoreFactory venditoreFactory = new VenditoreFactory(nuovoUtente.getRuolo());
+                UtenteRegistrato utenteSpecifico = venditoreFactory.creaUtente(
+                        nuovoUtente.getUsername(),
+                        nuovoUtente.getNomeUtente(),
+                        nuovoUtente.getCognome(),
+                        nuovoUtente.getEmail(),
+                        nuovoUtente.getPassword(),
+                        nuovoUtente.getLuogo(),
+                        ((Venditore) nuovoUtente).getPartitaIva() // Cast per accedere alla partitaIva
+                );
             }
 
+            UtenteFactory utenteFactory = new UtenteBaseFactory(nuovoUtente.getRuolo());
             // Creazione dell'utente specifico basato sul ruolo
-            UtenteRegistrato utenteSpecifico = UtenteFactory.creaUtente(
-                    nuovoUtente.getRuolo(),
+            UtenteRegistrato utenteSpecifico = utenteFactory.creaUtente(
                     nuovoUtente.getUsername(),
                     nuovoUtente.getNomeUtente(),
                     nuovoUtente.getCognome(),
                     nuovoUtente.getEmail(),
                     nuovoUtente.getPassword(),
-                    nuovoUtente.getLuogo(),
-                    partitaIva
+                    nuovoUtente.getLuogo()
             );
 
             // Salvataggio dell'utente nel database
@@ -121,7 +128,7 @@ import java.util.Optional;
             return mappa;
         }
 
-        public boolean condivisioneSuSocial(int prodottoId, Social social,
+        public void condivisioneSuSocial(int prodottoId, Social social,
                                                            String username, String password) {
 
             // Recupera il prodotto dal database
@@ -131,10 +138,6 @@ import java.util.Optional;
             // Recupera l'utente registrato dal database
             UtenteRegistrato utente = utentiRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("Utente non trovato"));
-            //if (utente.isEmpty() || !utente.get().getPassword().equals(password)) {
-
-            // Restituisce la risposta di successo
-            return true;
         }
 
 }

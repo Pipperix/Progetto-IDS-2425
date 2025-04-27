@@ -1,17 +1,12 @@
 package cs.unicam.filiera_agricola.Utenti;
 
 import cs.unicam.filiera_agricola.Acquisto.Acquirente;
-import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
-import cs.unicam.filiera_agricola.Prodotti.ProdottiService;
-import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Vendita.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/utenti")
@@ -19,8 +14,6 @@ public class UtentiController{
 
     @Autowired
     private UtentiRepository utentiRepository;
-    @Autowired
-    private ProdottiRepository prodottiRepository;
     @Autowired
     private UtentiService utentiService;
 

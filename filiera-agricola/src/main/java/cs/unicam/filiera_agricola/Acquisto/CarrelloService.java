@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Acquisto;
 
+import cs.unicam.filiera_agricola.Prodotti.MetodoPagamento;
 import cs.unicam.filiera_agricola.Prodotti.ProdottiRepository;
 import cs.unicam.filiera_agricola.Prodotti.Prodotto;
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
@@ -33,8 +34,7 @@ public class CarrelloService {
         return carrello.getProdotti();
     }
 
-    // TODO: aggiungere anche la quantità di quanti prodotti si aggiungono?
-    public void aggiungiProdotto(int acquirenteId, int prodottoId) {
+    public void aggiungiProdotto(int acquirenteId, int prodottoId, int quantita) {
         UtenteRegistrato utente = utentiRepository.findById(acquirenteId)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
@@ -57,7 +57,10 @@ public class CarrelloService {
 
         if (!prodotto.getDescrizione().isApprovato())
             throw new RuntimeException("Il prodotto non è stato ancora approvato");
-        carrello.getProdotti().add(prodotto);
+
+        for (int i = 0; i < quantita; i ++) {
+            carrello.getProdotti().add(prodotto);
+        }
         carrelloRepository.save(carrello);
     }
 
@@ -93,5 +96,15 @@ public class CarrelloService {
             totale += prodotto.getPrezzo();
         }
         return totale;
+    }
+
+    public void effettuaPagamento (String username, MetodoPagamento metodoDiPagamento) {
+        UtenteRegistrato utente = utentiRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        if (utente.getRuolo() != Ruolo.ACQUIRENTE)
+            throw new RuntimeException("L'id fornito non corrisponde all'id di un acquirente");
+        Acquirente acquirente = (Acquirente) utente;
+        acquirente.setMetodoPagamento(metodoDiPagamento);
+        utentiRepository.save(acquirente);
     }
 }
