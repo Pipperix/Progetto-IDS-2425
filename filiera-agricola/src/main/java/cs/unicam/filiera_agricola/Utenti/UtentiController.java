@@ -91,6 +91,16 @@ public class UtentiController{
         }
     }
 
+    @GetMapping("/daAutorizzare")
+    public ResponseEntity<Object> getUtentiDaAutorizzare() {
+        try {
+            List<UtenteRegistrato> utenti = utentiService.getUtentiDaAutorizzare();
+            return ResponseEntity.ok(utenti);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
     @PostConstruct
     public void init() {

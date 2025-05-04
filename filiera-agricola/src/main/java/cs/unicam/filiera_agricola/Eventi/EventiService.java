@@ -99,6 +99,8 @@ public class EventiService {
                 .orElseThrow(() -> new RuntimeException("Evento non trovato"));
         UtenteRegistrato utente = utentiRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        if (utente.getRuolo() != Ruolo.ACQUIRENTE)
+            throw new RuntimeException("L'id fornito non corrisponde all'id di un acquirente");
 
         if (evento.prenotazione(utente)) {
             eventoRepository.save(evento);  // Salva l'evento aggiornato

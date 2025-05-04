@@ -1,5 +1,6 @@
 package cs.unicam.filiera_agricola.Acquisto;
 
+import cs.unicam.filiera_agricola.Eventi.EventiController;
 import cs.unicam.filiera_agricola.Prodotti.*;
 import cs.unicam.filiera_agricola.Utenti.*;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
@@ -43,6 +44,10 @@ public class Acquirente extends UtenteRegistrato {
 
     public void effettuaPagamento(CarrelloController carrello, MetodoPagamento metodoPagamento) {
         carrello.effettuaPagamento(this.getUsername(), metodoPagamento);
+    }
+
+    public void prenotaEvento(EventiController eventi, int eventoId) {
+        eventi.prenotaEvento(eventoId, this.getUsername());
     }
 
     public void setMetodoPagamento(MetodoPagamento metodoPagamento) {

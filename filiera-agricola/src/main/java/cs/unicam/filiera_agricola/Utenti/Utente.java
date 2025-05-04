@@ -1,7 +1,5 @@
 package cs.unicam.filiera_agricola.Utenti;
 
-import org.springframework.http.ResponseEntity;
-
 public interface Utente {
 
     // Metodo per la visualizzazione dei contenuti (prodotti) presenti nel sistema

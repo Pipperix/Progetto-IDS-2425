@@ -140,4 +140,19 @@ import java.util.Optional;
                     .orElseThrow(() -> new RuntimeException("Utente non trovato"));
         }
 
+        public List<UtenteRegistrato> getUtentiDaAutorizzare() {
+            List<UtenteRegistrato> utenti = utentiRepository.findAll();
+            List<UtenteRegistrato> utentiNonAutorizzati = new ArrayList<>();
+
+            for (UtenteRegistrato utente : utenti) {
+                if (!utente.isAutorizzato()) {
+                    utentiNonAutorizzati.add(utente);
+                }
+            }
+            if (utentiNonAutorizzati.isEmpty()) {
+                throw new RuntimeException("Nessun utente non autorizzato trovato");
+            }
+            return utentiNonAutorizzati;
+        }
+
 }

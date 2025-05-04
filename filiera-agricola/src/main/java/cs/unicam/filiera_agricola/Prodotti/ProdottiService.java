@@ -7,6 +7,8 @@ import cs.unicam.filiera_agricola.Vendita.Distributore;
 import cs.unicam.filiera_agricola.Vendita.Venditore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
     @Service
@@ -220,5 +222,20 @@ import java.util.List;
                     "Attendi l'autorizzazione del gestore.");
         }
         return venditore;
+    }
+
+    public List<Prodotto> getProdottiDaVerificare() {
+        List<Prodotto> prodotti = prodottiRepository.findAll();
+        List<Prodotto> prodottiNonVerificati = new ArrayList<>();
+
+        for (Prodotto prodotto : prodotti) {
+            if (!prodotto.getDescrizione().isApprovato()) {
+                prodottiNonVerificati.add(prodotto);
+            }
+        }
+        if (prodottiNonVerificati.isEmpty()) {
+            throw new RuntimeException("Nessun prodotto non approvato trovato");
+        }
+        return prodottiNonVerificati;
     }
 }

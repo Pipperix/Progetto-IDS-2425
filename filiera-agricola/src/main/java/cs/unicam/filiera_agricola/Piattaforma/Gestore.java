@@ -2,6 +2,7 @@ package cs.unicam.filiera_agricola.Piattaforma;
 
 import cs.unicam.filiera_agricola.Utenti.Ruolo;
 import cs.unicam.filiera_agricola.Utenti.UtenteRegistrato;
+import cs.unicam.filiera_agricola.Utenti.UtentiController;
 import cs.unicam.filiera_agricola.Vendita.Luogo;
 import jakarta.persistence.*;
 
@@ -21,6 +22,10 @@ public class Gestore extends UtenteRegistrato {
 
     public void autorizzaAccount(int utenteId, PiattaformaController piattaforma) {
         piattaforma.autorizzaAccount(utenteId);
+    }
+
+    public void getUtentiDaAutorizzare(UtentiController utenti) {
+        utenti.getUtentiDaAutorizzare();
     }
 
 }

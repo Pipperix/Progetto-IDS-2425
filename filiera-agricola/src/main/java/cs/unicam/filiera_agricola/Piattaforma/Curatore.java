@@ -19,7 +19,11 @@ public class Curatore extends UtenteRegistrato {
     }
 
     @Transactional // garantisce che l'approvazione sia salvata correttamente
-    public void approvaContenuto(Prodotto prodotto, ProdottiController prodottiController) {
-        prodottiController.approvaContenuto(prodotto.getId());
+    public void approvaContenuto(Prodotto prodotto, ProdottiController prodotti) {
+        prodotti.approvaContenuto(prodotto.getId());
+    }
+
+    public void getProdottiDaVerificare(ProdottiController prodotti) {
+        prodotti.getProdottiDaVerificare();
     }
 }

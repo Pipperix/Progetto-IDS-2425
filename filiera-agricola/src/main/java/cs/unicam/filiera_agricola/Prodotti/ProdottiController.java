@@ -244,11 +244,21 @@ public class ProdottiController {
         }
     }
 
-    @GetMapping(value = "/{venditoreId}")
+    @GetMapping(value = "/prodotti/{venditoreId}")
     public ResponseEntity<Object> getProdottiVenditore(@PathVariable int venditoreId) {
         try {
             List<Prodotto> prodottiVenditore = prodottiService.getProdottiVenditore(venditoreId);
             return ResponseEntity.ok(prodottiVenditore);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/prodotti/daVerificare")
+    public ResponseEntity<Object> getProdottiDaVerificare() {
+        try {
+            List<Prodotto> prodotti = prodottiService.getProdottiDaVerificare();
+            return ResponseEntity.ok(prodotti);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

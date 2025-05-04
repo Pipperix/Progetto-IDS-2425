@@ -111,10 +111,6 @@ public class UtenteRegistrato implements Utente {
         eventi.getEventiAnimatore(id);
     }
 
-    public void prenotaEvento(EventiController eventi, int eventoId) {
-        eventi.prenotaEvento(eventoId, this.getUsername());
-    }
-
     public void getPacchetti(ProdottiController prodotti) {
         prodotti.getPacchetti();
     }
