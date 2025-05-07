@@ -71,7 +71,17 @@ public class CarrelloService {
         if (acquirente.getRuolo() != Ruolo.ACQUIRENTE)
             throw new RuntimeException("L'id fornito non corrisponde all'id di un acquirente");
         Carrello carrello = carrelloRepository.findByAcquirenteId(acquirenteId);
-        carrello.getProdotti().removeIf(prodotto -> prodotto.getId() == prodottoId);
+        Prodotto prodottoDaRimuovere = null;
+        for (Prodotto p : carrello.getProdotti()) {
+            if (p.getId() == prodottoId) {
+                prodottoDaRimuovere = p;
+                break;
+            }
+        }
+        if (prodottoDaRimuovere == null) {
+            throw new RuntimeException("Il prodotto con ID " + prodottoId + " non è presente nel carrello");
+        }
+        carrello.getProdotti().remove(prodottoDaRimuovere);
         carrelloRepository.save(carrello);
     }
 
@@ -106,5 +116,6 @@ public class CarrelloService {
         Acquirente acquirente = (Acquirente) utente;
         acquirente.setMetodoPagamento(metodoDiPagamento);
         utentiRepository.save(acquirente);
+        svuotaCarrello(acquirente.getId());
     }
 }
